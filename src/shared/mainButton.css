@@ -1,0 +1,12 @@
+.main-button {
+    background: #F65261;
+    border: none;
+    border-radius: 4px;
+    padding: 18px 73px 15px 74px;
+    font-weight: 500;
+    font-size: 20px;
+    line-height: 24px;
+    text-align: center;
+    text-transform: uppercase;
+    color: #FFFFFF;
+}
