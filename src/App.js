@@ -1,23 +1,18 @@
-import logo from './logo.svg';
 import './App.css';
+import SearchForm from './header/searchForm';
+import GenreToggle from './main/genreToggle';
+import UselessCounter from './main/uselessCounter';
 
 function App() {
   return (
     <div className="App">
       <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
+        <SearchForm placeholder="What do you want to watch?" />
       </header>
+      <main className="App-main">
+        <GenreToggle/>
+        <UselessCounter changeBy={2} />
+      </main>
     </div>
   );
 }
