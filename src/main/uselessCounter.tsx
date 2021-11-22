@@ -1,7 +1,15 @@
-import React from "react"
+import * as React from "react";
 
-export default class UselessCounter extends React.PureComponent {
-    constructor(props) {
+interface UselessCounterProps {
+    changeBy: number;
+}
+
+interface UselessCounterState {
+    value: number;
+}
+
+export default class UselessCounter extends React.PureComponent<UselessCounterProps, UselessCounterState> {
+    constructor(props: UselessCounterProps) {
         super(props);
         this.state = { value: 0 };
         this.handleDecrement = this.handleDecrement.bind(this);
@@ -9,14 +17,14 @@ export default class UselessCounter extends React.PureComponent {
     }
 
     handleIncrement() {
-        this.setState((state, props) => ({
-            value: state.value + props.changeBy
+        this.setState((prevState, prevProps) => ({
+            value: prevState.value + prevProps.changeBy
         }));
     }
 
     handleDecrement() {
-        this.setState((state, props) => ({
-            value: state.value - props.changeBy
+        this.setState((prevState, prevProps) => ({
+            value: prevState.value - prevProps.changeBy
         }));
     }
 

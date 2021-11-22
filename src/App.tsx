@@ -1,3 +1,4 @@
+import * as React from 'react';
 import './App.css';
 import SearchForm from './header/searchForm';
 import GenreToggle from './main/genreToggle';

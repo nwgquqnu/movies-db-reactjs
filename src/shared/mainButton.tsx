@@ -1,7 +1,12 @@
-import React from 'react';
+import * as React from 'react';
 import './mainButton.css'
 
-class MainButton extends React.PureComponent {
+interface ButtonProps { 
+    handler: <T extends React.SyntheticEvent<HTMLButtonElement>>(event: T) => void;
+    text: string;
+};
+
+class MainButton extends React.PureComponent<ButtonProps> {
     render() {
         return React.createElement('button', {
             className: 'main-button',

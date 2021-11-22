@@ -1,3 +1,4 @@
+import * as React from "react";
 import RadioToggle from "../shared/radioToggle";
 import './genreToggle.css'
 
