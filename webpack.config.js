@@ -2,27 +2,13 @@ const path = require('path');
 const HtmlWebpackPlugin = require('html-webpack-plugin');
 const MiniCssExtractPlugin = require("mini-css-extract-plugin");
 const webpack = require('webpack');
+const { merge } = require('webpack-merge');
 const packageJson = require('./package.json');
 
-module.exports = {
+module.exports = (env) => merge({
     entry: './src/index.tsx',
-    output: {
-        path: path.resolve(__dirname, 'dist'),
-        filename: '[name].[contenthash]_bundle.js'
-    },
-    module: {
-        rules: [
-            {
-                test: /\.tsx?$/,
-                exclude: /node_modules/,
-                use: 'ts-loader'
-            },
-            {
-                test: /\.css$/i,
-                use: [MiniCssExtractPlugin.loader, "css-loader"],
-            }
-        ]
-    },
+    output: require("./webpack/output")(env),
+    module: require("./webpack/module")(env),
     plugins: [
         new HtmlWebpackPlugin({
             template: path.join(__dirname, 'src', 'index.html')
@@ -34,5 +20,6 @@ module.exports = {
     ],
     resolve: {
         extensions: ['.tsx', '.ts', '.js']
-    }
-}
+    },
+    optimization: require("./webpack/optimization")(env)
+}, require("./webpack/common")(env));

@@ -1,5 +1,5 @@
 import * as React from 'react';
-import MainButton from '../shared/mainButton';
+import MainButton from '../shared/MainButton';
 
 interface SearchFormProps {
     placeholder: string;
