@@ -1,0 +1,31 @@
+.center-container {
+    max-width: 1200px;
+    margin: 0 auto
+  }
+
+.app-header {
+    composes: center-container;
+    background: url("../../assets/Bitmap.png"), linear-gradient(0deg, #000000, #000000);
+    background-position: center;
+    min-height: 396px;
+    display: flex;
+    flex-flow: row wrap;
+    align-items: flex-start;
+    justify-content: space-between;
+    font-size: calc(10px + 2vmin);
+    padding: 20px 56px 20px 60px;
+    box-sizing: border-box;
+    align-content: flex-start;
+    row-gap: 35px;
+  }
+
+.search-form {
+    flex-basis: 100%;
+    display: flex;
+    justify-content: space-around;
+    flex-flow: row wrap;
+    align-items: flex-end;
+    margin-left: 60px;
+    margin-right: 64px;
+    column-gap: 14px;
+}

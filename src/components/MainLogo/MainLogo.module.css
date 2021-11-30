@@ -1,0 +1,19 @@
+.font-family {
+    font-family: Montserrat, Arial, Helvetica, sans-serif;
+}
+
+.logo-color {
+    color: #F65261;
+}
+
+.main-logo {
+    composes: font-family logo-color;
+    font-style: normal;
+    font-weight: 500;
+    font-size: 20px;
+    line-height: 24px;
+}
+
+.main-logo span {
+    font-weight: 900;
+}

@@ -1,0 +1,93 @@
+
+.movie-article {
+    position: relative;
+}
+
+.movie-article:hover {
+    cursor: pointer;
+}
+
+.movie-article img {
+    margin: 0 auto;
+    display: block;
+}
+
+.movie-details-btn {
+    display: none;
+    position: absolute;
+    top: 16px;
+    right: 16px;
+    background: #2A202D;
+    box-shadow: 0px 0px 4px rgba(0, 0, 0, 0.196596);
+    border: none;
+    border-radius: 50%;
+    font-size: 0;
+    width: 36px;
+    height: 36px;
+    padding: 0;
+    background-image: radial-gradient(circle 1px at 50% 25%, white 2px, transparent 3px),radial-gradient(circle 1px at 50% 50%, white 2px, transparent 3px),radial-gradient(circle 1px at 50% 75%, white 2px, transparent 3px);
+    cursor: pointer;
+}
+
+.movie-article:hover .movie-details-btn {
+    display: block;
+}
+
+.movie-info {
+    margin-top: 20px;
+    display: flex;
+    flex-flow: row wrap;
+    justify-content: space-between;
+}
+
+.movie-title {
+    font-family: Montserrat;
+    font-style: normal;
+    font-weight: 500;
+    font-size: 18px;
+    line-height: 22px;
+
+    color: #FFFFFF;
+
+    mix-blend-mode: normal;
+    opacity: 0.7;
+}
+
+
+.movie-year {
+    font-family: Montserrat;
+    font-style: normal;
+    font-weight: 500;
+    font-size: 14px;
+    line-height: 24px;
+    
+    text-align: center;
+    
+    color: #FFFFFF;
+    
+    opacity: 0.7;
+    border: 1px solid rgba(151,151,151, 127);
+    box-sizing: border-box;
+    border-radius: 4px;
+
+    width: 66px;
+    height: 26px;
+}
+
+.movie-genre {
+    font-family: Montserrat;
+    font-style: normal;
+    font-weight: 500;
+    font-size: 14px;
+    line-height: 17px;
+
+    color: #FFFFFF;
+
+    mix-blend-mode: normal;
+    opacity: 0.5;
+    flex-basis: 100%;
+}
+
+.movie-genre, .movie-year, .movie-title {
+    margin: 0;
+}

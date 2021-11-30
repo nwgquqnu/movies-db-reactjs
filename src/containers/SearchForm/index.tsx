@@ -1,13 +1,15 @@
 import * as React from 'react';
-import MainButton from '../shared/MainButton';
+import FindInput from '../../components/FindInput';
+import MainButton from '../../components/MainButton';
 
 interface SearchFormProps {
     placeholder: string;
+    className: string;
 }
 
 interface SearchFormState {
     value: string;
-}
+} 
 
 export default class SearchForm extends React.Component<SearchFormProps, SearchFormState> {
     constructor(props: SearchFormProps) {
@@ -27,11 +29,8 @@ export default class SearchForm extends React.Component<SearchFormProps, SearchF
 
     render() {
         return (
-            <form onSubmit={this.handleSubmit}>
-                <label>
-                    Find your movie
-                    <input type="text" value={this.state.value} placeholder={this.props.placeholder} onChange={this.handleChange} />
-                </label>
+            <form className={this.props.className} onSubmit={this.handleSubmit}>
+                <FindInput value={this.state.value} placeholder={this.props.placeholder} handleChange={this.handleChange} />
                 <MainButton text="Search" handler={this.handleSubmit} />
             </form>
         );

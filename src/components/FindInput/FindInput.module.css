@@ -1,0 +1,49 @@
+.font-family {
+    font-family: Montserrat, Arial, Helvetica, sans-serif;
+}
+
+.font {
+    composes: font-family;
+    font-style: normal;
+    color: #FFFFFF;
+}
+
+.find-input {
+    composes: font;
+    background: rgba(50, 50, 50, 0.8);
+    mix-blend-mode: normal;
+    opacity: 0.7;
+    border: none;
+    border-radius: 4px;
+    height: 57px;
+    
+    font-weight: normal;
+    font-size: 20px;
+    line-height: 24px;
+    width: 100%;
+    vertical-align: bottom;
+    box-sizing: border-box;
+}
+
+.find-input::placeholder {
+    mix-blend-mode: normal;
+    opacity: 0.3;
+
+}
+
+.find-input-label {
+    composes: font;
+    
+    font-weight: 300;
+    font-size: 40px;
+    line-height: 49px;
+
+    letter-spacing: 1px;
+    text-transform: uppercase;
+    width: calc(100% - 253px);
+}
+
+.find-input-label span {
+    display: block;
+    margin-bottom: 38px;
+}

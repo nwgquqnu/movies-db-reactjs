@@ -1,19 +1,15 @@
 import * as React from 'react';
-import * as appStyles from './App.module.css';
-import SearchForm from './header/SearchForm';
-import GenreToggle from './main/GenreToggle';
-import UselessCounter from './main/UselessCounter';
+import * as css from './App.module.css';
+import Footer from './components/Footer';
+import Header from './components/Header';
+import Main from './components/Main';
 
 function App() {
   return (
-    <div className={appStyles.app}>
-      <header className={appStyles.appHeader}>
-        <SearchForm placeholder="What do you want to watch?" />
-      </header>
-      <main className={appStyles.appMain}>
-        <GenreToggle/>
-        <UselessCounter changeBy={2} />
-      </main>
+    <div className={css.app}>
+      <Header />
+      <Main />
+      <Footer />
     </div>
   );
 }

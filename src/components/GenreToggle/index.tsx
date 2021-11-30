@@ -1,5 +1,5 @@
 import * as React from "react";
-import RadioToggle from "../shared/RadioToggle";
+import RadioToggle from "../../containers/RadioToggle";
 import * as css from './GenreToggle.module.css'
 
 const GenreToggle = () => (

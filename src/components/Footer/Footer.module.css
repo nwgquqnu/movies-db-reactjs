@@ -1,0 +1,12 @@
+.center-container {
+    max-width: 1200px;
+    margin: 0 auto
+  }
+
+.app-footer {
+    composes: center-container;
+    background-color: #424242;
+    height: 70px;
+    line-height: 70px;
+    text-align: center;
+}
