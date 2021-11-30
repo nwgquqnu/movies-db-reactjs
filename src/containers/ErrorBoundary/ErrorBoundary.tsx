@@ -1,11 +1,7 @@
 import * as React from 'react'
 
 export default class ErrorBoundary extends React.Component {
-    state: { hasError: Boolean };
-    constructor(props: React.PropsWithChildren<{}>) {
-        super(props);
-        this.state = { hasError: false };
-    }
+    state = { hasError: false };
 
     static getDerivedStateFromError() {
         return { hasError: true };
