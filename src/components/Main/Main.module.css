@@ -19,41 +19,6 @@
     column-gap: 50px;
 }
 
-.movie-sort-by span {
-    font-family: Montserrat;
-    font-style: normal;
-    font-weight: normal;
-    font-size: 16px;
-    line-height: 20px;
-
-    /* identical to box height */
-    letter-spacing: 0.888889px;
-    text-transform: uppercase;
-
-    color: #FFFFFF;
-
-    mix-blend-mode: normal;
-    opacity: 0.6;
-    margin-right: 31px;
-}
-
-.movie-sort-by select {
-    background: none;
-    border: none;
-    font-family: Montserrat;
-    font-style: normal;
-    font-weight: 500;
-    font-size: 16px;
-    line-height: 20px;
-
-    /* identical to box height */
-    letter-spacing: 0.888889px;
-    text-transform: uppercase;
-
-    color: #FFFFFF;
-    appearance: none;
-}
-
 .nav-panel {
     display: flex;
     justify-content: space-between;
@@ -67,44 +32,4 @@
     border-bottom: 1px solid #080707;
     display: block;
     width: 100%;
-}
-
-:root {
-    --radius: 2px;
-    --baseFg: #FFFFFF;
-    --baseBg: #232323;
-    --accentFg: #F65261;
-    --accentBg: #232323;
-  }
-
-.movie-sort-by select {
-    appearance: none;
-    color: var(--baseFg);
-    line-height: 1;
-    padding: 0.65em 2.5em 0.55em 0.75em;
-    border-radius: var(--radius);
-    background-color: var(--baseBg);
-    background-image: linear-gradient(var(--baseBg), var(--baseBg)),
-      linear-gradient(-135deg, transparent 50%, var(--accentBg) 50%),
-      linear-gradient(-225deg, transparent 50%, var(--accentBg) 50%),
-      linear-gradient(var(--accentBg) 42%, var(--accentFg) 42%);
-    background-repeat: no-repeat, no-repeat, no-repeat, no-repeat;
-    background-size: 1px 100%, 20px 22px, 20px 22px, 20px 100%;
-    background-position: right 20px center, right bottom, right bottom, right bottom;   
-}
-  
-.movie-sort-by select:hover {
-    background-image: linear-gradient(var(--baseBg), var(--baseBg)),
-      linear-gradient(-135deg, transparent 50%, var(--accentFg) 50%),
-      linear-gradient(-225deg, transparent 50%, var(--accentFg) 50%),
-      linear-gradient(var(--accentFg) 42%, var(--accentBg) 42%);
-      cursor: pointer;
-}
-  
-.movie-sort-by select:active {
-    background-image: linear-gradient(var(--baseBg), var(--baseBg)),
-      linear-gradient(-135deg, transparent 50%, var(--accentFg) 50%),
-      linear-gradient(-225deg, transparent 50%, var(--accentFg) 50%),
-      linear-gradient(var(--accentFg) 42%, var(--accentBg) 42%);
-    cursor: pointer;
 }

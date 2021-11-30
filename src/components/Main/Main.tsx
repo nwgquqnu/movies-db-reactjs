@@ -1,9 +1,10 @@
 import * as React from 'react'
 import GenreToggle from '../GenreToggle';
-import UselessCounter from '../../containers/UselessCounter';
 import * as css from './Main.module.css';
 import MovieCard from '../MovieCard';
 import MovieCounter from '../MovieCounter';
+import MovieSortBy from '../MovieSortBy/MovieSortBy';
+import ErrorBoundary from '../../containers/ErrorBoundary';
 
 const movieDataList = [
     {
@@ -52,21 +53,17 @@ const movieDataList = [
 
 export default () => (
     <main className={css.appMain}>
-        <nav className={css.navPanel}>
-            <GenreToggle />
-            <label className={css.movieSortBy}>
-                <span>sort by</span>
-                <select>
-                    <option value="release_date" selected>Release Date</option>
-                    <option value="name">Name</option>
-                </select>
-            </label>
-        </nav>
-        <MovieCounter count={movieDataList.length}/>
-        <div className={css.movieContainer}>
-            {movieDataList.map((movieData)=>(
-                <MovieCard {...movieData} />
-            ))}
-        </div>
+        <ErrorBoundary>
+            <nav className={css.navPanel}>
+                <GenreToggle />
+                <MovieSortBy />
+            </nav>
+            <MovieCounter count={movieDataList.length}/>
+            <div className={css.movieContainer}>
+                {movieDataList.map((movieData)=>(
+                    <MovieCard {...movieData} />
+                ))}
+            </div>
+        </ErrorBoundary>
     </main>
 );
