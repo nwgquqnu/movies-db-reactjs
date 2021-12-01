@@ -7,6 +7,7 @@
         "jsx": "react",
         "allowJs": true,
         "moduleResolution": "node",
-        "sourceMap": true
+        "sourceMap": true,
+        "plugins": [{ "name": "typescript-plugin-css-modules" }]
     }
 }

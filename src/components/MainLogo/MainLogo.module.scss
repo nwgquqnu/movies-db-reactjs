@@ -1,0 +1,16 @@
+%logo-color {
+    color: #F65261;
+}
+
+.main-logo {
+    @extend %logo-color;
+    font-family: inherit;
+    font-style: normal;
+    font-weight: 500;
+    font-size: 20px;
+    line-height: 24px;
+}
+
+.main-logo span {
+    font-weight: 900;
+}

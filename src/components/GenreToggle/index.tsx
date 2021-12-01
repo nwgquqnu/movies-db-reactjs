@@ -1,9 +1,9 @@
 import * as React from "react";
-import RadioToggle from "../shared/radioToggle";
-import './genreToggle.css'
+import RadioToggle from "../../containers/RadioToggle";
+import * as css from './GenreToggle.module.scss'
 
 const GenreToggle = () => (
-    <div className="genre-toggle">
+    <div className={css.genreToggle}>
         <RadioToggle values={['All', 'Documentary', 'Comedy', 'Horror', 'Crime']} name="genres" initialValue="All"/>
     </div>
 );

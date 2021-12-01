@@ -4,9 +4,9 @@
   "description": "An application for searching movies written in reactjs",
   "private": "true",
   "scripts": {
-    "start": "webpack serve --open --hot --config webpack.dev.js",
-    "build": "webpack --config webpack.prod.js",
-    "build-dev": "webpack --config webpack.dev.js"
+    "start": "webpack serve --open --hot --env environment=dev",
+    "build": "webpack --env environment=prod",
+    "build-dev": "webpack --env environment=dev"
   },
   "license": "SEE LICENSE IN LICENSE",
   "dependencies": {
@@ -20,8 +20,11 @@
     "css-loader": "^6.5.1",
     "html-webpack-plugin": "^5.5.0",
     "mini-css-extract-plugin": "^2.4.5",
+    "sass": "^1.44.0",
+    "sass-loader": "^12.3.0",
     "ts-loader": "^9.2.6",
     "typescript": "^4.5.2",
+    "typescript-plugin-css-modules": "^3.4.0",
     "webpack": "^5.64.2",
     "webpack-cli": "^4.9.1",
     "webpack-dev-server": "^4.5.0",
