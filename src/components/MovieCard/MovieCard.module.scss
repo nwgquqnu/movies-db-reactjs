@@ -1,3 +1,9 @@
+%font {
+    font-family: inherit;
+    font-style: normal;
+    font-weight: 500;
+    color: #FFFFFF;
+}
 
 .movie-article {
     position: relative;
@@ -41,13 +47,8 @@
 }
 
 .movie-title {
-    font-family: Montserrat;
-    font-style: normal;
-    font-weight: 500;
     font-size: 18px;
     line-height: 22px;
-
-    color: #FFFFFF;
 
     mix-blend-mode: normal;
     opacity: 0.7;
@@ -55,15 +56,10 @@
 
 
 .movie-year {
-    font-family: Montserrat;
-    font-style: normal;
-    font-weight: 500;
     font-size: 14px;
     line-height: 24px;
     
     text-align: center;
-    
-    color: #FFFFFF;
     
     opacity: 0.7;
     border: 1px solid rgba(151,151,151, 127);
@@ -75,13 +71,8 @@
 }
 
 .movie-genre {
-    font-family: Montserrat;
-    font-style: normal;
-    font-weight: 500;
     font-size: 14px;
     line-height: 17px;
-
-    color: #FFFFFF;
 
     mix-blend-mode: normal;
     opacity: 0.5;
@@ -89,5 +80,6 @@
 }
 
 .movie-genre, .movie-year, .movie-title {
+    @extend %font;
     margin: 0;
 }

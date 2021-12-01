@@ -1,6 +1,6 @@
 import * as React from 'react';
 import SearchForm from '../../containers/SearchForm';
-import * as css from './Header.module.css';
+import * as css from './Header.module.scss';
 import MainLogo from '../MainLogo';
 import AddButton from '../AddButton';
 

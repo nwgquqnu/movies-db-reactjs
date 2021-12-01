@@ -1,5 +1,5 @@
 import * as React from 'react';
-import * as css from './FindInput.module.css';
+import * as css from './FindInput.module.scss';
 
 interface FindInputProps {
     value: string;

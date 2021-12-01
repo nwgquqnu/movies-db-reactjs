@@ -1,6 +1,6 @@
 import * as React from 'react'
 import GenreToggle from '../GenreToggle';
-import * as css from './Main.module.css';
+import * as css from './Main.module.scss';
 import MovieCard from '../MovieCard';
 import MovieCounter from '../MovieCounter';
 import MovieSortBy from '../MovieSortBy/MovieSortBy';

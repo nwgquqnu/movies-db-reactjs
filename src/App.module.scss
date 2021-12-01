@@ -1,7 +1,16 @@
-.App {
-  background: #888888;
-  min-height: 100vh;
+%center-container {
+  max-width: 1200px;
+  margin: 0 auto
+}
+
+%font-family {
   font-family: Montserrat, Arial, Helvetica, sans-serif;
+}
+
+.App {
+  @extend %center-container;
+  @extend %font-family;
+  min-height: 100vh;
   font-style: normal;
   color: #FFFFFF;
 }

@@ -1,5 +1,5 @@
 import * as React from 'react';
-import * as css from './MainButton.module.css'
+import * as css from './MainButton.module.scss'
 
 interface ButtonProps { 
     handler: <T extends React.SyntheticEvent<HTMLButtonElement>>(event: T) => void;

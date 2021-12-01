@@ -5,7 +5,7 @@ const config = {
         filename: '[name]_bundle.js'
     },
     prod: {
-        path: path.resolve(__dirname, 'dist'),
+        path: path.resolve(__dirname, '../dist'),
         filename: '[name].[contenthash]_bundle.js'
     }
 };

@@ -1,5 +1,5 @@
 import * as React from 'react';
-import * as css from './MovieSortBy.module.css';
+import * as css from './MovieSortBy.module.scss';
 
 export default ({ defaultValue = "release_date"}) => (
     <label className={css.movieSortBy}>

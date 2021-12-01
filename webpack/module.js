@@ -1,19 +1,14 @@
-const { merge } = require('webpack-merge');
+const { merge, mergeWithRules } = require('webpack-merge');
 const MiniCssExtractPlugin = require("mini-css-extract-plugin");
 
-const tsLoaderConfig = {
-    test: /\.tsx?$/,
-    exclude: /node_modules/,
-    use: 'ts-loader'
-};
-
-const miniCssExtractPluginConfig = {
-    test: /\.css$/i,
-    loader: MiniCssExtractPlugin.loader
-};
+const mergeRules = mergeWithRules({
+    use: {
+        loader: "match",
+        options: "merge",
+    },
+});
 
 const cssLoaderConfig = {
-    test: /\.css$/i,
     loader: "css-loader",
     options: {
         esModule: true,
@@ -25,19 +20,45 @@ const cssLoaderConfig = {
         }
     }
 };
+
+const tsConfig = {
+    test: /\.tsx?$/,
+    exclude: /node_modules/,
+    use: 'ts-loader'
+};
+
+const cssConfig = {
+    test: /\.css$/i,
+    use: [
+        MiniCssExtractPlugin.loader,
+        cssLoaderConfig
+    ]
+};
+
+const sassConfig = {
+    test: /\.s[ac]ss$/i,
+    use: [
+        MiniCssExtractPlugin.loader,
+        cssLoaderConfig,
+        "sass-loader"
+    ]
+};
+
+const prodCssLoaderConfig = merge(cssLoaderConfig, { options: { modules: { localIdentName: "[hash:base64]" } } });
+
 const config = {
     dev: {
         rules: [
-            tsLoaderConfig,
-            miniCssExtractPluginConfig,
-            cssLoaderConfig
+            tsConfig,
+            cssConfig,
+            sassConfig
         ]
     },
     prod: {
         rules: [
-            tsLoaderConfig,
-            miniCssExtractPluginConfig,
-            merge(cssLoaderConfig, { options: { modules: { localIdentName: "[hash:base64]" } } })
+            tsConfig,
+            mergeRules(cssConfig, { use: [prodCssLoaderConfig] }),
+            mergeRules(sassConfig, { use: [prodCssLoaderConfig] })
         ]
     }
 };

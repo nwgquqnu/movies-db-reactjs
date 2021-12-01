@@ -1,5 +1,5 @@
 import * as React from 'react';
-import * as css from './MovieCard.module.css'
+import * as css from './MovieCard.module.scss'
 
 interface MovieCardProps {
     posterUrl: string;

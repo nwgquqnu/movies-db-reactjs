@@ -1,5 +1,5 @@
 import * as React from 'react';
-import * as css from './MovieCounter.module.css';
+import * as css from './MovieCounter.module.scss';
 
 interface MovieCounterProps {
     count: number;

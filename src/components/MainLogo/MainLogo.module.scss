@@ -1,13 +1,10 @@
-.font-family {
-    font-family: Montserrat, Arial, Helvetica, sans-serif;
-}
-
-.logo-color {
+%logo-color {
     color: #F65261;
 }
 
 .main-logo {
-    composes: font-family logo-color;
+    @extend %logo-color;
+    font-family: inherit;
     font-style: normal;
     font-weight: 500;
     font-size: 20px;
