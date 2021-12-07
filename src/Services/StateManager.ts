@@ -1,0 +1,100 @@
+import { ActionType, MovieDbStateAction } from "../types/movieActions";
+import { Movie, MovieDbState, NewMovie, SortOrder, UpdateActivity } from "../types/movieModels";
+
+type SortHandler = (m1: Movie, m2: Movie) => number;
+
+type SortOrderHandlers = Record<SortOrder, SortHandler>;
+
+const sortOrderHandlers: SortOrderHandlers = {
+    [SortOrder.ByNameAsc]: (m1: Movie, m2: Movie) => m1.title.localeCompare(m2.title),
+    [SortOrder.ByNameDesc]: (m1: Movie, m2: Movie) => m2.title.localeCompare(m1.title),
+    [SortOrder.ByReleaseAsc]: (m1: Movie, m2: Movie) => m1.year.localeCompare(m2.year),
+    [SortOrder.ByReleaseDesc]: (m1: Movie, m2: Movie) => m2.year.localeCompare(m1.year),
+};
+
+export default class MovieDbStateManager {
+
+    static initState(initList: ReadonlyArray<Movie>): Readonly<MovieDbState> {
+        const sortOrder = SortOrder.ByReleaseAsc;
+        const moviesList = [...initList].sort(sortOrderHandlers[sortOrder]);
+        return { moviesList, sortOrder };
+    }
+
+    static reducer(state: Readonly<MovieDbState>, action: Readonly<MovieDbStateAction>): Readonly<MovieDbState> {
+        switch (action.type) {
+            case ActionType.AddMovie:
+                return MovieDbStateManager.handleAddMovie(state, action.payload);
+            case ActionType.DeleteMovie:
+                return MovieDbStateManager.handleDeleteMovie(state, action.payload);
+            case ActionType.EditMovie:
+                return MovieDbStateManager.handleEditMovie(state, action.payload);
+            case ActionType.SelectMovie:
+                return MovieDbStateManager.handleSelectMovie(state, action.payload);
+            case ActionType.SortMovies:
+                return MovieDbStateManager.handleSortMovies(state, action.payload);
+            case ActionType.ShowAddMovie:
+                return MovieDbStateManager.handleShowHideAction(state, UpdateActivity.addActivity);
+            case ActionType.ShowEditMovie:
+                return MovieDbStateManager.handleShowHideAction(state, UpdateActivity.editActivity, action.payload);
+            case ActionType.ShowDeleteMovie:
+                return MovieDbStateManager.handleShowHideAction(state, UpdateActivity.deleteActivity, action.payload);
+            case ActionType.HideMovieUpdate:
+                return MovieDbStateManager.handleShowHideAction(state);
+            default:
+                const _exhaustiveCheck: never = action;
+                return _exhaustiveCheck;
+        }
+    }
+
+    private static handleAddMovie(state: Readonly<MovieDbState>, movie: Readonly<NewMovie>): Readonly<MovieDbState> {
+        const newMovieState: Movie = { ...movie, id: MovieDbStateManager.generateId(movie, state.moviesList) };
+        const moviesList = [...state.moviesList, newMovieState].sort(sortOrderHandlers[state.sortOrder]);
+        return { ...state, moviesList, currentUpdateActivity: undefined, movieUnderUpdateActivity: undefined };
+    }
+
+    private static generateId(movie: Readonly<NewMovie>, moviesList: ReadonlyArray<Movie>): string {
+        const firstTitleLetters = movie.title.split(" ").map(word => word[0]).join().toLowerCase();
+        const initialId = firstTitleLetters + movie.year;
+        const moviesIdsSet: ReadonlySet<string> = new Set(moviesList.map(m => m.id));
+        let finalId = initialId;
+        let nextIndex = 1;
+        while (moviesIdsSet.has(finalId)) {
+            finalId = `${initialId}_${nextIndex}`;
+            nextIndex++;
+        }
+        return finalId;
+    }
+
+    private static handleDeleteMovie(state: Readonly<MovieDbState>, id: string): Readonly<MovieDbState> {
+        const moviesList = state.moviesList.filter(movie => movie.id !== id);
+        return { ...state, moviesList, currentUpdateActivity: undefined, movieUnderUpdateActivity: undefined };
+    }
+
+    private static handleEditMovie(state: Readonly<MovieDbState>, movie: Readonly<Movie>): Readonly<MovieDbState> {
+        const index = state.moviesList.findIndex(m => m.id === movie.id);
+        if (index === -1) {
+            return state;
+        }
+        const moviesList = [...state.moviesList];
+        moviesList[index] = { ...movie };
+        moviesList.sort(sortOrderHandlers[state.sortOrder]);
+        return { ...state, moviesList, currentUpdateActivity: undefined, movieUnderUpdateActivity: undefined };
+    }
+
+    private static handleSelectMovie(state: Readonly<MovieDbState>, movie: Readonly<Movie> | undefined): Readonly<MovieDbState> {
+        const selectedMovie = movie;
+        return { ...state, selectedMovie };
+    }
+
+    private static handleSortMovies(state: Readonly<MovieDbState>, sortOrder: SortOrder): Readonly<MovieDbState> {
+        const moviesList = [...state.moviesList].sort(sortOrderHandlers[state.sortOrder]);
+        return { ...state, sortOrder, moviesList };
+    }
+
+    private static handleShowHideAction(state: Readonly<MovieDbState>,
+        currentUpdateActivity?: UpdateActivity,
+        movieUnderUpdateActivity?: Readonly<Movie>): Readonly<MovieDbState> {
+        return { ...state, currentUpdateActivity, movieUnderUpdateActivity };
+    }
+
+}

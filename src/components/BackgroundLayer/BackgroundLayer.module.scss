@@ -1,0 +1,9 @@
+.back-layer {
+    position: fixed;
+    width: 100vw;
+    min-height: 100vh;
+    background: rgba(35, 35, 35, 0.89);
+    mix-blend-mode: normal;
+    backdrop-filter: blur(24.4645px);
+    z-index: 999;
+}

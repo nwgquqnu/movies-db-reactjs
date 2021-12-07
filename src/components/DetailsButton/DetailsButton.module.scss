@@ -1,0 +1,84 @@
+.details-btn > a {
+    display: block;
+    background: #2A202D;
+    box-shadow: 0px 0px 4px rgba(0, 0, 0, 0.196596);
+    border: none;
+    border-radius: 50%;
+    width: 36px;
+    height: 36px;
+    padding: 0;
+    background-image: radial-gradient(circle 1px at 50% 25%, white 2px, transparent 3px),radial-gradient(circle 1px at 50% 50%, white 2px, transparent 3px),radial-gradient(circle 1px at 50% 75%, white 2px, transparent 3px);
+    cursor: pointer;
+}
+
+.details-btn > a {
+    font-size: 0;
+}
+
+.details-btn-container {
+
+    a {
+        text-decoration: none;
+    }
+    
+    nav {
+        font-family: inherit;
+    }
+    
+    ul {
+        list-style: none;
+        margin: 0;
+        padding-left: 0;
+    }
+    
+    .details-btn ul {
+        background: #2A202D;
+    }
+    
+    .details-btn  .li {
+        color: #FFFFFF;
+        background: #2A202D;
+        display: block;
+        padding: 1rem;
+        text-decoration: none;
+        transition-duration: 0.5s;
+    }
+    
+    li a {
+        color: #FFFFFF;
+    }
+
+    .details-btn:hover > a,
+    .details-btn:focus-within > a,
+    .details-btn li:hover,
+    .details-btn li:focus-within {
+        background-color: #F65261;
+        cursor: pointer;
+    }
+    
+    li:focus-within a {
+        outline: none;
+    }
+    
+    ul li ul {
+        background: #2A202D;
+        min-width: 12rem;
+        position: absolute;
+        right: 0;
+        display: none;
+        padding: 0.5rem 0;
+    }
+    
+    ul li:hover > ul,
+    ul li:focus-within > ul,
+    ul li ul:hover,
+    ul li ul:focus {
+        display: block;
+    }
+    
+    ul li ul li {
+        box-sizing: border-box;
+        padding: 1rem;
+        width: 100%;
+    }
+}
