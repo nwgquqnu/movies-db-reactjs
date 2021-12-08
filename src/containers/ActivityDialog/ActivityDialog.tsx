@@ -1,7 +1,7 @@
 import * as React from 'react'
 import { ActionType, MovieDbStateAction } from '../../types/movieActions';
 import { Movie, NewMovie, UpdateActivity } from '../../types/movieModels';
-import AddMovieForm from '../AddMovieForm';
+import ModifyMovieForm from '../ModifyMovieForm';
 import DeleteMovieForm from '../DeleteMovieForm';
 import Modal from '../Modal';
 
@@ -41,7 +41,7 @@ export default ({ currentUpdateActivity, activityMovie: movie, dispatch, genreLi
     if (currentUpdateActivity == UpdateActivity.addActivity) {
         modal = (
             <Modal initialModalRootId="modal">
-                <AddMovieForm<NewMovie>
+                <ModifyMovieForm<NewMovie>
                     title="Add Movie"
                     closeHandler={closeHandler}
                     emptyMovieCreator={FormMovie}
@@ -52,7 +52,7 @@ export default ({ currentUpdateActivity, activityMovie: movie, dispatch, genreLi
     } else if (currentUpdateActivity === UpdateActivity.editActivity) {
         modal = (
             <Modal initialModalRootId="modal">
-                <AddMovieForm<Movie>
+                <ModifyMovieForm<Movie>
                     title="Edit Movie"
                     movie={movie!}
                     closeHandler={closeHandler}

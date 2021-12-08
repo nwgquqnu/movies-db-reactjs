@@ -3,11 +3,9 @@ import * as css from './App.module.scss';
 import Footer from './components/Footer';
 import Header from './components/Header';
 import Main from './components/Main';
-import MovieDbStateManager from './Services/StateManager';
-import MovieDataFetcher from './Services/MovieDataFetcher';
-import Modal from './containers/Modal';
-import AddMovieForm from './containers/AddMovieForm';
 import ActivityDialog from './containers/ActivityDialog';
+import MovieDataFetcher from './Services/MovieDataFetcher';
+import MovieDbStateManager from './Services/StateManager';
 
 function App() {
   const initialData = React.useMemo(() => MovieDataFetcher.fetchMovieData(), []);

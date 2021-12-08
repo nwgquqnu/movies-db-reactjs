@@ -1,25 +1,132 @@
-.app-header {
-    background: url("../../assets/Bitmap.png"), linear-gradient(0deg, #000000, #000000);
-    background-position: center;
-    min-height: 396px;
-    display: flex;
-    flex-flow: row wrap;
-    align-items: flex-start;
-    justify-content: space-between;
-    font-size: calc(10px + 2vmin);
-    padding: 20px 56px 20px 60px;
-    box-sizing: border-box;
-    align-content: flex-start;
-    row-gap: 35px;
-  }
+%font {
+  font-family: inherit;
+  font-style: normal;
+  font-weight: 500;
+  color: #ffffff;
+}
 
-.search-form {
-    flex-basis: 100%;
-    display: flex;
-    justify-content: space-around;
-    flex-flow: row wrap;
-    align-items: flex-end;
-    margin-left: 60px;
-    margin-right: 64px;
-    column-gap: 14px;
+$row-gap: 30px;
+$col-gap: 50px;
+$max-img-width: 322px;
+$close-btn-size: 27px;
+
+
+.details-app-header {
+  background: #232323;
+  min-height: 396px;
+  display: flex;
+  flex-flow: row wrap;
+  align-items: flex-start;
+  justify-content: space-between;
+  font-size: calc(10px + 2vmin);
+  padding: 20px 56px 20px 60px;
+  box-sizing: border-box;
+  align-content: flex-start;
+  row-gap: $row-gap;
+  column-gap: $col-gap;
+}
+
+.details-app-header > strong {
+  flex-basis: calc(100% - $close-btn-size - $col-gap);
+}
+
+.details-app-header > button {
+  appearance: none;
+  border: none;
+  background: none;
+  color: #FFFFFF;
+  font-style: normal;
+  font-weight: 300;
+  width: $close-btn-size;
+  height: $close-btn-size;
+  font-size: $close-btn-size;
+  line-height: $close-btn-size;
+}
+
+.details-app-header > button:hover {
+  background-color: #F65261;
+  border-radius: 4px;
+}
+
+.movie-poster {
+  max-width: $max-img-width;
+  max-height: 455px;
+}
+
+.movie-info {
+  flex-basis: calc(100% - $col-gap - $max-img-width);
+}
+
+.movie-title {
+  font-weight: 300;
+  font-size: 40px;
+  line-height: 49px;
+
+  letter-spacing: 1px;
+  text-transform: uppercase;
+}
+
+.movie-title span {
+  display: inline-block;
+  font-style: normal;
+  font-weight: 300;
+  font-size: 20px;
+  line-height: 24px;
+  text-align: center;
+  text-transform: uppercase;
+  margin-left: 25px;
+
+  color: #ffffff;
+  border: 1px solid #ffffff;
+  box-sizing: border-box;
+  width: 60px;
+  height: 60px;
+  border-radius: 50%;
+  vertical-align: middle;
+  text-align: center;
+  line-height: 60px;
+}
+
+.movie-year-and-length {
+  font-style: normal;
+  font-weight: 300;
+  font-size: 24px;
+  line-height: 29px;
+
+  color: #F65261;
+  margin-top: 30px;
+  margin-top: 29px;
+}
+
+.movie-year-and-length > span:first-child {
+  margin-right: 51px;
+}
+
+.movie-genre {
+  font-size: 14px;
+  line-height: 17px;
+
+  mix-blend-mode: normal;
+  opacity: 0.5;
+  flex-basis: 100%;
+}
+
+.movie-description {
+  font-style: normal;
+  font-weight: 300;
+  font-size: 20px;
+  line-height: 24px;
+
+  color: #ffffff;
+
+  mix-blend-mode: normal;
+  opacity: 0.5;
+}
+
+.movie-genre,
+.movie-year,
+.movie-title,
+.movie-description {
+  @extend %font;
+  margin: 0;
 }

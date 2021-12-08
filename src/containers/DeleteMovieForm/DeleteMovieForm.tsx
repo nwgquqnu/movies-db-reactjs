@@ -34,8 +34,8 @@ export default class DeleteMovieForm extends React.Component<DeleteMovieFormProp
         return (
             <article className={css.deleteMovieContainer}>
                 <header>
-                    <h1>Delete Movie</h1>
                     <button onClick={this.handleReset}>X</button>
+                    <h1>Delete Movie</h1>
                 </header>
                 <form className={css.deleteMovieForm} onSubmit={this.handleSubmit}>
                     <section>

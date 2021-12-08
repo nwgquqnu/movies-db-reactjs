@@ -129,8 +129,8 @@ export default class ModifyMovieForm<MovieType extends NewMovie> extends React.C
         return (
             <article className={css.modifyMovieContainer}>
                 <header>
-                    <h1>{this.props.title}</h1>
                     <button onClick={this.props.closeHandler}>X</button>
+                    <h1>{this.props.title}</h1>
                 </header>
                 <form className={css.modifyMovieForm} onSubmit={this.handleSubmit}>
                     <section>
@@ -181,7 +181,7 @@ export default class ModifyMovieForm<MovieType extends NewMovie> extends React.C
                                 onChange={this.handleChange} pattern="\d+" placeholder="minutes"/>
                             <span className={css.errorMessage}>{this.state.errors.runtime}</span>
                         </label>
-                        <label>
+                        <label className={css.movieDescription}>
                             <span>Overview</span>
                             <textarea name={newMovieFields.description}
                                 value={this.state.movie.description}

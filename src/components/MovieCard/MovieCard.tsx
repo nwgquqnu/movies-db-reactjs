@@ -1,11 +1,8 @@
 import * as React from 'react';
-import AddMovieForm from '../../containers/AddMovieForm';
-import DeleteMovieForm from '../../containers/DeleteMovieForm';
-import Modal from '../../containers/Modal';
 import { ActionType, MovieDbStateAction } from '../../types/movieActions';
-import { Movie, UpdateActivity } from '../../types/movieModels';
+import { Movie } from '../../types/movieModels';
 import DetailsButton from '../DetailsButton';
-import * as css from './MovieCard.module.scss'
+import * as css from './MovieCard.module.scss';
 
 interface MovieCardProps {
     movie: Movie;

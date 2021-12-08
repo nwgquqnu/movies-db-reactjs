@@ -10,17 +10,36 @@ interface MovieDetailsHeaderProps {
     dispatch: React.Dispatch<MovieDbStateAction>;
 }
 
-export default (props: MovieDetailsHeaderProps) => {
+function formatMinutes(minutes: number): string {
+    return `${Math.floor(minutes / 60)}h ${('0' + (minutes % 60)).slice(-2)}m`;
+}
+
+function formatRating(rating: number): string {
+    return rating.toPrecision(2)
+}
+export default ({ selectedMovie: movie, dispatch }: MovieDetailsHeaderProps) => {
     const closeCallBack = React.useCallback(
         () => {
-            props.dispatch({ type: ActionType.SelectMovie })
+            dispatch({ type: ActionType.SelectMovie })
         },
-        [props.dispatch],
+        [dispatch],
     );
+    const displayLength = React.useMemo(() => formatMinutes(movie.runtime), [movie.runtime]);
+
     return (
-    <header className={css.appHeader}>
-        <MainLogo />
-        <AddButton text="Close" handler={closeCallBack} />
-        <div>Some details</div>
-    </header>
-)};
+        <header className={css.detailsAppHeader}>
+            <MainLogo />
+            <button onClick={closeCallBack}>X</button>
+            <img className={css.moviePoster} src={movie.posterUrl} alt={movie.title} />
+            <div className={css.movieInfo}>
+                <h1 className={css.movieTitle}>{movie.title}<span>{formatRating(movie.rating)}</span></h1>
+                <p className={css.movieGenre}>{movie.genre.join(", ")}</p>
+                <p className={css.movieYearAndLength}>
+                    <span>{movie.year}</span>
+                    <span>{displayLength}</span>
+                </p>
+                <p className={css.movieDescription}>{movie.description}</p>
+            </div>
+        </header>
+    )
+};
