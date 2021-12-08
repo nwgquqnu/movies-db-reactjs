@@ -17,7 +17,7 @@ export default class MovieDbStateManager {
     static initState(initList: ReadonlyArray<Movie>): Readonly<MovieDbState> {
         const sortOrder = SortOrder.ByReleaseAsc;
         const moviesList = [...initList].sort(sortOrderHandlers[sortOrder]);
-        const genres = [...new Set(moviesList.flatMap(m => m.genre))].sort();
+        const genres = MovieDbStateManager.getGenresFromMovies(moviesList);
         return { moviesList, sortOrder, genres, filteredMoviesList: moviesList };
     }
 
@@ -53,7 +53,12 @@ export default class MovieDbStateManager {
         const newMovieState: Movie = { ...movie, id: MovieDbStateManager.generateId(movie, state.moviesList) };
         const moviesList = [...state.moviesList, newMovieState].sort(sortOrderHandlers[state.sortOrder]);
         const filteredMoviesList = MovieDbStateManager.getFilteredMoviesList(moviesList, state.activeGenre);
-        return { ...state, moviesList, currentUpdateActivity: undefined, movieUnderUpdateActivity: undefined, filteredMoviesList };
+        const genres = MovieDbStateManager.getGenresFromMovies(moviesList);
+        return {
+            ...state, moviesList, genres, filteredMoviesList,
+            currentUpdateActivity: undefined,
+            movieUnderUpdateActivity: undefined
+        };
     }
 
     private static generateId(movie: Readonly<NewMovie>, moviesList: ReadonlyArray<Movie>): string {
@@ -71,8 +76,14 @@ export default class MovieDbStateManager {
 
     private static handleDeleteMovie(state: Readonly<MovieDbState>, id: string): Readonly<MovieDbState> {
         const moviesList = state.moviesList.filter(movie => movie.id !== id);
-        const filteredMoviesList = MovieDbStateManager.getFilteredMoviesList(moviesList, state.activeGenre);
-        return { ...state, moviesList, currentUpdateActivity: undefined, movieUnderUpdateActivity: undefined, filteredMoviesList };
+        const genres = MovieDbStateManager.getGenresFromMovies(moviesList);
+        const activeGenre = state.activeGenre && genres.includes(state.activeGenre) ? state.activeGenre : undefined;
+        const filteredMoviesList = MovieDbStateManager.getFilteredMoviesList(moviesList, activeGenre);
+        return {
+            ...state, moviesList, genres, filteredMoviesList, activeGenre,
+            currentUpdateActivity: undefined,
+            movieUnderUpdateActivity: undefined
+        };
     }
 
     private static handleEditMovie(state: Readonly<MovieDbState>, movie: Readonly<Movie>): Readonly<MovieDbState> {
@@ -83,8 +94,14 @@ export default class MovieDbStateManager {
         const moviesList = [...state.moviesList];
         moviesList[index] = { ...movie };
         moviesList.sort(sortOrderHandlers[state.sortOrder]);
-        const filteredMoviesList = MovieDbStateManager.getFilteredMoviesList(moviesList, state.activeGenre);
-        return { ...state, moviesList, currentUpdateActivity: undefined, movieUnderUpdateActivity: undefined, filteredMoviesList };
+        const genres = MovieDbStateManager.getGenresFromMovies(moviesList);
+        const activeGenre = state.activeGenre && genres.includes(state.activeGenre) ? state.activeGenre : undefined;
+        const filteredMoviesList = MovieDbStateManager.getFilteredMoviesList(moviesList, activeGenre);
+        return {
+            ...state, moviesList, genres, filteredMoviesList, activeGenre,
+            currentUpdateActivity: undefined,
+            movieUnderUpdateActivity: undefined
+        };
     }
 
     private static handleSelectMovie(state: Readonly<MovieDbState>, movie: Readonly<Movie> | undefined): Readonly<MovieDbState> {
@@ -114,6 +131,10 @@ export default class MovieDbStateManager {
             return moviesList;
         }
         return moviesList.filter(movie => movie.genre.includes(activeGenre));
+    }
+
+    private static getGenresFromMovies(moviesList: ReadonlyArray<Movie>): ReadonlyArray<string> {
+        return [...new Set(moviesList.flatMap(m => m.genre))].sort();
     }
 
 }
