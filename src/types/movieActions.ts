@@ -10,6 +10,7 @@ export enum ActionType {
     ShowDeleteMovie = "SHOW_DELETE_MOVIE",
     ShowEditMovie = "SHOW_EDIT_MOVIE",
     HideMovieUpdate = "HIDE_MOVIE_UPDATE",
+    ActiveGenreChange = "ACTIVE_GENRE_CHANCE",
 }
 
 interface NoPayloadAction {
@@ -36,6 +37,11 @@ interface DeleteMovieAction {
     payload: string;
 }
 
+interface ActiveGenreChangeAction {
+    type: ActionType.ActiveGenreChange;
+    payload: string;
+}
+
 interface SortMoviesAction {
     type: ActionType.SortMovies;
     payload: SortOrder;
@@ -48,4 +54,5 @@ export type MovieDbStateAction = (
     | SelectMovieAction
     | SortMoviesAction
     | NoPayloadAction
+    | ActiveGenreChangeAction
 );

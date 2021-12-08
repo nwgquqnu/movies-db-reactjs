@@ -43,6 +43,9 @@ export enum UpdateActivity {
 
 export interface MovieDbState {
     readonly moviesList: ReadonlyArray<Movie>;
+    readonly filteredMoviesList: ReadonlyArray<Movie>;
+    readonly genres: ReadonlyArray<string>;
+    readonly activeGenre?: string;
     readonly selectedMovie?: Readonly<Movie>;
     readonly sortOrder: SortOrder;
     readonly movieUnderUpdateActivity?: Readonly<Movie>;

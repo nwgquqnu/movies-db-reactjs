@@ -6,8 +6,8 @@ type SortHandler = (m1: Movie, m2: Movie) => number;
 type SortOrderHandlers = Record<SortOrder, SortHandler>;
 
 const sortOrderHandlers: SortOrderHandlers = {
-    [SortOrder.ByNameAsc]: (m1: Movie, m2: Movie) => m1.title.localeCompare(m2.title),
-    [SortOrder.ByNameDesc]: (m1: Movie, m2: Movie) => m2.title.localeCompare(m1.title),
+    [SortOrder.ByNameAsc]: (m1: Movie, m2: Movie) => m1.title.toLocaleLowerCase().localeCompare(m2.title.toLocaleLowerCase()),
+    [SortOrder.ByNameDesc]: (m1: Movie, m2: Movie) => m2.title.toLocaleLowerCase().localeCompare(m1.title.toLocaleLowerCase()),
     [SortOrder.ByReleaseAsc]: (m1: Movie, m2: Movie) => m1.year.localeCompare(m2.year),
     [SortOrder.ByReleaseDesc]: (m1: Movie, m2: Movie) => m2.year.localeCompare(m1.year),
 };
@@ -17,7 +17,8 @@ export default class MovieDbStateManager {
     static initState(initList: ReadonlyArray<Movie>): Readonly<MovieDbState> {
         const sortOrder = SortOrder.ByReleaseAsc;
         const moviesList = [...initList].sort(sortOrderHandlers[sortOrder]);
-        return { moviesList, sortOrder };
+        const genres = [...new Set(moviesList.flatMap(m => m.genre))].sort();
+        return { moviesList, sortOrder, genres, filteredMoviesList: moviesList };
     }
 
     static reducer(state: Readonly<MovieDbState>, action: Readonly<MovieDbStateAction>): Readonly<MovieDbState> {
@@ -40,6 +41,8 @@ export default class MovieDbStateManager {
                 return MovieDbStateManager.handleShowHideAction(state, UpdateActivity.deleteActivity, action.payload);
             case ActionType.HideMovieUpdate:
                 return MovieDbStateManager.handleShowHideAction(state);
+            case ActionType.ActiveGenreChange:
+                return MovieDbStateManager.handleActiveGenreChange(state, action.payload);
             default:
                 const _exhaustiveCheck: never = action;
                 return _exhaustiveCheck;
@@ -49,7 +52,8 @@ export default class MovieDbStateManager {
     private static handleAddMovie(state: Readonly<MovieDbState>, movie: Readonly<NewMovie>): Readonly<MovieDbState> {
         const newMovieState: Movie = { ...movie, id: MovieDbStateManager.generateId(movie, state.moviesList) };
         const moviesList = [...state.moviesList, newMovieState].sort(sortOrderHandlers[state.sortOrder]);
-        return { ...state, moviesList, currentUpdateActivity: undefined, movieUnderUpdateActivity: undefined };
+        const filteredMoviesList = MovieDbStateManager.getFilteredMoviesList(moviesList, state.activeGenre);
+        return { ...state, moviesList, currentUpdateActivity: undefined, movieUnderUpdateActivity: undefined, filteredMoviesList };
     }
 
     private static generateId(movie: Readonly<NewMovie>, moviesList: ReadonlyArray<Movie>): string {
@@ -67,7 +71,8 @@ export default class MovieDbStateManager {
 
     private static handleDeleteMovie(state: Readonly<MovieDbState>, id: string): Readonly<MovieDbState> {
         const moviesList = state.moviesList.filter(movie => movie.id !== id);
-        return { ...state, moviesList, currentUpdateActivity: undefined, movieUnderUpdateActivity: undefined };
+        const filteredMoviesList = MovieDbStateManager.getFilteredMoviesList(moviesList, state.activeGenre);
+        return { ...state, moviesList, currentUpdateActivity: undefined, movieUnderUpdateActivity: undefined, filteredMoviesList };
     }
 
     private static handleEditMovie(state: Readonly<MovieDbState>, movie: Readonly<Movie>): Readonly<MovieDbState> {
@@ -78,7 +83,8 @@ export default class MovieDbStateManager {
         const moviesList = [...state.moviesList];
         moviesList[index] = { ...movie };
         moviesList.sort(sortOrderHandlers[state.sortOrder]);
-        return { ...state, moviesList, currentUpdateActivity: undefined, movieUnderUpdateActivity: undefined };
+        const filteredMoviesList = MovieDbStateManager.getFilteredMoviesList(moviesList, state.activeGenre);
+        return { ...state, moviesList, currentUpdateActivity: undefined, movieUnderUpdateActivity: undefined, filteredMoviesList };
     }
 
     private static handleSelectMovie(state: Readonly<MovieDbState>, movie: Readonly<Movie> | undefined): Readonly<MovieDbState> {
@@ -87,14 +93,27 @@ export default class MovieDbStateManager {
     }
 
     private static handleSortMovies(state: Readonly<MovieDbState>, sortOrder: SortOrder): Readonly<MovieDbState> {
-        const moviesList = [...state.moviesList].sort(sortOrderHandlers[state.sortOrder]);
-        return { ...state, sortOrder, moviesList };
+        const moviesList = [...state.moviesList].sort(sortOrderHandlers[sortOrder]);
+        const filteredMoviesList = MovieDbStateManager.getFilteredMoviesList(moviesList, state.activeGenre);
+        return { ...state, sortOrder, moviesList, filteredMoviesList };
     }
 
     private static handleShowHideAction(state: Readonly<MovieDbState>,
         currentUpdateActivity?: UpdateActivity,
         movieUnderUpdateActivity?: Readonly<Movie>): Readonly<MovieDbState> {
         return { ...state, currentUpdateActivity, movieUnderUpdateActivity };
+    }
+
+    private static handleActiveGenreChange(state: Readonly<MovieDbState>, activeGenre: string): Readonly<MovieDbState> {
+        const filteredMoviesList = MovieDbStateManager.getFilteredMoviesList(state.moviesList, activeGenre);
+        return { ...state, activeGenre, filteredMoviesList };
+    }
+
+    private static getFilteredMoviesList(moviesList: ReadonlyArray<Movie>, activeGenre?: string): ReadonlyArray<Movie> {
+        if (!activeGenre) {
+            return moviesList;
+        }
+        return moviesList.filter(movie => movie.genre.includes(activeGenre));
     }
 
 }
