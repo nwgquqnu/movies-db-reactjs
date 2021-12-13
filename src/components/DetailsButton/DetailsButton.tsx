@@ -1,4 +1,5 @@
 import * as React from 'react';
+import clsx from 'clsx';
 import { ActionType, MovieDbStateAction } from '../../types/movieActions';
 import { Movie } from '../../types/movieModels';
 import * as css from './DetailsButton.module.scss';
@@ -28,7 +29,7 @@ export default ({ containerClassName, movie, dispatch }: DetailsButtonProps) => 
         [movie, dispatch],
     );
     return (
-        <nav className={`${css.detailsBtnContainer} ${containerClassName}`} role="navigation">
+        <nav className={clsx(css.detailsBtnContainer, containerClassName)} role="navigation">
             <ul>
                 <li className={css.detailsBtn}><a href="#" aria-haspopup="true">Details</a>
                     <ul className="dropdown" aria-label="submenu">
