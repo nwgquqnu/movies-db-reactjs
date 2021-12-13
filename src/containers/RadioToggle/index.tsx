@@ -12,13 +12,12 @@ export default class RadioToggle extends React.Component<RadioToggleProps> {
 
     constructor(props: RadioToggleProps) {
         super(props);
-        this.handleChange = this.handleChange.bind(this);
         this.generateIdsForValues();
     }
 
-    handleChange(event: React.ChangeEvent<HTMLInputElement>): void {
+    handleChange = (event: React.ChangeEvent<HTMLInputElement>): void => {
         this.props.changeHandler(event.target.value);
-    }
+    };
 
     generateIdsForValues(): void {
         this.props.values.forEach(value => {
