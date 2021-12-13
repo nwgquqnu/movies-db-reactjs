@@ -36,11 +36,12 @@ export default ({ currentUpdateActivity, activityMovie: movie, dispatch, genreLi
         (movie: Movie) => dispatch({ type: ActionType.EditMovie, payload: movie }),
         [dispatch],
     );
+    const domParent = React.useMemo(() => document && document.getElementById("modal"), []);
 
     let modal = null;
     if (currentUpdateActivity == UpdateActivity.addActivity) {
         modal = (
-            <Modal initialModalRootId="modal">
+            <Modal initialModalRoot={domParent}>
                 <ModifyMovieForm<NewMovie>
                     title="Add Movie"
                     closeHandler={closeHandler}
@@ -51,7 +52,7 @@ export default ({ currentUpdateActivity, activityMovie: movie, dispatch, genreLi
         )
     } else if (currentUpdateActivity === UpdateActivity.editActivity) {
         modal = (
-            <Modal initialModalRootId="modal">
+            <Modal initialModalRoot={domParent}>
                 <ModifyMovieForm<Movie>
                     title="Edit Movie"
                     movie={movie!}
@@ -63,7 +64,7 @@ export default ({ currentUpdateActivity, activityMovie: movie, dispatch, genreLi
         )
     } else if (currentUpdateActivity === UpdateActivity.deleteActivity) {
         modal = (
-            <Modal initialModalRootId="modal">
+            <Modal initialModalRoot={domParent}>
                 <DeleteMovieForm dispatch={dispatch} movie={movie!} />
             </Modal>
         )
