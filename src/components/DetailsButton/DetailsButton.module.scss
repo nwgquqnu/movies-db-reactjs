@@ -1,4 +1,11 @@
-.details-btn > a {
+button {
+    font: inherit;
+    text-decoration: none;
+    border: none;
+    background: none;
+}
+
+.details-btn > button {
     display: block;
     background: #2A202D;
     box-shadow: 0px 0px 4px rgba(0, 0, 0, 0.196596);
@@ -11,15 +18,11 @@
     cursor: pointer;
 }
 
-.details-btn > a {
+.details-btn > button {
     font-size: 0;
 }
 
 .details-btn-container {
-
-    a {
-        text-decoration: none;
-    }
     
     nav {
         font-family: inherit;
@@ -44,19 +47,20 @@
         transition-duration: 0.5s;
     }
     
-    li a {
+    li button {
         color: #FFFFFF;
     }
 
-    .details-btn:hover > a,
-    .details-btn:focus-within > a,
+    button:hover,
+    .details-btn:hover > button,
+    .details-btn:focus-within > button,
     .details-btn li:hover,
     .details-btn li:focus-within {
         background-color: #F65261;
         cursor: pointer;
     }
     
-    li:focus-within a {
+    li:focus-within button {
         outline: none;
     }
     

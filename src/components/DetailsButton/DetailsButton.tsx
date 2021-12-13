@@ -31,10 +31,10 @@ export default ({ containerClassName, movie, dispatch }: DetailsButtonProps) => 
     return (
         <nav className={clsx(css.detailsBtnContainer, containerClassName)} role="navigation">
             <ul>
-                <li className={css.detailsBtn}><a href="#" aria-haspopup="true">Details</a>
+                <li className={css.detailsBtn}><button aria-haspopup="true">Details</button>
                     <ul className="dropdown" aria-label="submenu">
-                        <li onClick={clickEditHandler}><a href="#">Edit</a></li>
-                        <li onClick={clickDeleteHandler}><a href="#">Delete</a></li>
+                        <li onClick={clickEditHandler}><button>Edit</button></li>
+                        <li onClick={clickDeleteHandler}><button>Delete</button></li>
                     </ul>
                 </li>
             </ul>
