@@ -2,30 +2,22 @@ import * as React from "react";
 
 interface RadioToggleProps {
     name: string;
-    initialValue: string;
+    selectedValue: string;
     values: string[];
+    changeHandler: (checkedValue: string) => void;
 }
 
 export default class RadioToggle extends React.Component<RadioToggleProps> {
     private idMap: { [key: string]: string; } = {};
-    state: { checkedValue: string };
 
     constructor(props: RadioToggleProps) {
         super(props);
-        this.state = { checkedValue: this.calculateInitialValue() };
         this.handleChange = this.handleChange.bind(this);
         this.generateIdsForValues();
     }
 
-    calculateInitialValue(): string {
-        if (this.props.initialValue) {
-            return this.props.initialValue;
-        }
-        return (this.props.values.length && this.props.values[0]) || ''
-    }
-
     handleChange(event: React.ChangeEvent<HTMLInputElement>): void {
-        this.setState({ checkedValue: event.target.value });
+        this.props.changeHandler(event.target.value);
     }
 
     generateIdsForValues(): void {
@@ -45,12 +37,12 @@ export default class RadioToggle extends React.Component<RadioToggleProps> {
                     className="radio-toggle"
                     name={this.props.name}
                     type="radio"
-                    checked={this.state.checkedValue === value}
+                    checked={this.props.selectedValue === value}
                     value={value}
                     onChange={this.handleChange} />
                 <label htmlFor={this.idMap[value]}>{value}</label>
             </React.Fragment>
-        )
+        );
         return (
             <>
                 {inputList}

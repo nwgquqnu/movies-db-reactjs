@@ -1,15 +1,17 @@
 import * as React from 'react';
-import SearchForm from '../../containers/SearchForm';
-import * as css from './Header.module.scss';
-import MainLogo from '../MainLogo';
-import AddButton from '../AddButton';
+import { MovieDbStateAction } from '../../types/movieActions';
+import { Movie } from '../../types/movieModels';
+import MovieDetailsHeader from '../MovieDetailsHeader';
+import SearchFormHeader from '../SearchFormHeader';
 
-function dummyHandler() {}
+interface HeaderProps {
+    selectedMovie?: Movie;
+    dispatch: React.Dispatch<MovieDbStateAction>;
+}
 
-export default () => (
-    <header className={css.appHeader}>
-        <MainLogo />
-        <AddButton text="+ Add Movie" handler={dummyHandler} />
-        <SearchForm className={css.searchForm} placeholder="What do you want to watch?" />
-    </header>
-);
+export default (props: HeaderProps) => {
+    if (props.selectedMovie) {
+        return <MovieDetailsHeader selectedMovie={props.selectedMovie} dispatch={props.dispatch}/>;
+    }
+    return <SearchFormHeader dispatch={props.dispatch} />;
+};

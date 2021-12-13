@@ -1,6 +1,6 @@
 import * as React from 'react';
 import FindInput from '../../components/FindInput';
-import MainButton from '../../components/MainButton';
+import SearchButton from '../../components/SearchButton';
 
 interface SearchFormProps {
     placeholder: string;
@@ -31,7 +31,7 @@ export default class SearchForm extends React.Component<SearchFormProps, SearchF
         return (
             <form className={this.props.className} onSubmit={this.handleSubmit}>
                 <FindInput value={this.state.value} placeholder={this.props.placeholder} handleChange={this.handleChange} />
-                <MainButton text="Search" handler={this.handleSubmit} />
+                <SearchButton handler={this.handleSubmit} />
             </form>
         );
     }
