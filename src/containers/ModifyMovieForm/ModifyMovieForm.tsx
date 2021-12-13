@@ -1,7 +1,7 @@
 import * as React from 'react';
 import ResetButton from '../../components/ResetButton';
 import SubmitButton from '../../components/SubmitButton';
-import { NewMovie, newMovieFields, NewMovieKeys } from '../../types/movieModels';
+import { NewMovie, newMovieFields, NewMovieKeys, numericMovieFields } from '../../types/movieModels';
 import * as css from './ModifyMovieForm.module.scss';
 
 interface ModifyMovieFormProps<MovieType> {
@@ -33,11 +33,13 @@ export default class ModifyMovieForm<MovieType extends NewMovie> extends React.C
         event.stopPropagation();
         const currentTarget = event.currentTarget;
         const fieldName: NewMovieKeys = currentTarget.name as NewMovieKeys;
-        console.log(`change event name ${currentTarget.name} and value ${currentTarget.value}`)
 
         this.setState(prevState => (
             {
-                movie: { ...prevState.movie, [fieldName]: currentTarget.value },
+                movie: {
+                    ...prevState.movie,
+                    [fieldName]: this.parseFieldValue(fieldName, prevState.movie[fieldName], currentTarget.value)
+                },
                 errors: { ...prevState.errors, [fieldName]: undefined },
             }));
     };
@@ -69,6 +71,14 @@ export default class ModifyMovieForm<MovieType extends NewMovie> extends React.C
         this.setState((_, prevProps) => ({ movie: new prevProps.emptyMovieCreator(), errors: {} }));
     };
 
+    parseFieldValue(fieldName: string, value: any, nextValue: string): number | string {
+        if (fieldName in numericMovieFields) {
+            const parsedNextValue = Number(nextValue);
+            return Number.isNaN(parsedNextValue) ? value : parsedNextValue;
+        }
+        return nextValue;
+    }
+
     getPreviousYears(): Array<number> {
         const date = new Date();
         const year = date.getFullYear();
@@ -82,7 +92,6 @@ export default class ModifyMovieForm<MovieType extends NewMovie> extends React.C
 
     validateForm(): boolean {
         let validationResult = true;
-        console.log(`validate form movie ${JSON.stringify(this.state.movie)}`)
         const errors: AddMovieErrors = {};
 
         if (!this.state.movie.title) {
@@ -118,8 +127,14 @@ export default class ModifyMovieForm<MovieType extends NewMovie> extends React.C
         return validationResult;
     }
 
-    getStringValue(n: number): string {
-        return n < 0 ? "" : "" + n;
+    getStringValue(n: number, precicion?: number): string {
+        if (n < 0) {
+            return "";
+        }
+        if (precicion) {
+            return n.toPrecision(precicion);
+        }
+        return "" + n;
     }
 
     render() {
@@ -158,7 +173,7 @@ export default class ModifyMovieForm<MovieType extends NewMovie> extends React.C
                         <label>
                             <span>Rating</span>
                             <input name={newMovieFields.rating}
-                                type="text" value={this.getStringValue(this.state.movie.rating)}
+                                type="text" value={this.getStringValue(this.state.movie.rating, 2)}
                                 onChange={this.handleChange} pattern="\d+.?(\d{0,2})?" placeholder="7.8" />
                             <span className={css.errorMessage}>{this.state.errors.rating}</span>
                         </label>

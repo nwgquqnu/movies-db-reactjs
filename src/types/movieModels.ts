@@ -10,9 +10,15 @@ export interface NewMovie {
 
 export type NewMovieKeys = keyof NewMovie;
 
-export type NewMovieFields = {
-    [Key in keyof NewMovie]: `${Key}`;
-}
+type SameKeyAndValue<T> = {
+    [Key in keyof T as Extract<Key, string>]: `${Extract<Key, string>}`;
+};
+
+export type NewMovieFields = SameKeyAndValue<NewMovie>;
+
+type PickByType<T, Value> = {
+    [P in keyof T as T[P] extends Value | undefined ? P : never]: T[P]
+  }
 
 export const newMovieFields = Object.freeze<NewMovieFields>({
     title: "title",
@@ -20,6 +26,11 @@ export const newMovieFields = Object.freeze<NewMovieFields>({
     genre: "genre",
     posterUrl: "posterUrl",
     description: "description",
+    runtime: "runtime",
+    rating: "rating",
+});
+
+export const numericMovieFields = Object.freeze<SameKeyAndValue<PickByType<NewMovie, number>>>({
     runtime: "runtime",
     rating: "rating",
 })

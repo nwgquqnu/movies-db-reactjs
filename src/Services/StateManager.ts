@@ -92,13 +92,15 @@ export default class MovieDbStateManager {
             return state;
         }
         const moviesList = [...state.moviesList];
-        moviesList[index] = { ...movie };
+        moviesList[index] = Object.freeze(movie);
         moviesList.sort(sortOrderHandlers[state.sortOrder]);
         const genres = MovieDbStateManager.getGenresFromMovies(moviesList);
         const activeGenre = state.activeGenre && genres.includes(state.activeGenre) ? state.activeGenre : undefined;
         const filteredMoviesList = MovieDbStateManager.getFilteredMoviesList(moviesList, activeGenre);
+        const selectedMovie = movie.id === (state.selectedMovie && state.selectedMovie.id) ? moviesList[index] : state.selectedMovie;
         return {
             ...state, moviesList, genres, filteredMoviesList, activeGenre,
+            selectedMovie,
             currentUpdateActivity: undefined,
             movieUnderUpdateActivity: undefined
         };

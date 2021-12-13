@@ -18,18 +18,12 @@ function formatRating(rating: number): string {
     return rating.toPrecision(2)
 }
 export default ({ selectedMovie: movie, dispatch }: MovieDetailsHeaderProps) => {
-    const closeCallBack = React.useCallback(
-        () => {
-            dispatch({ type: ActionType.SelectMovie })
-        },
-        [dispatch],
-    );
     const displayLength = React.useMemo(() => formatMinutes(movie.runtime), [movie.runtime]);
 
     return (
         <header className={css.detailsAppHeader}>
             <MainLogo />
-            <button onClick={closeCallBack}>X</button>
+            <button onClick={() => dispatch({ type: ActionType.SelectMovie })}>X</button>
             <img className={css.moviePoster} src={movie.posterUrl} alt={movie.title} />
             <div className={css.movieInfo}>
                 <h1 className={css.movieTitle}>{movie.title}<span>{formatRating(movie.rating)}</span></h1>
