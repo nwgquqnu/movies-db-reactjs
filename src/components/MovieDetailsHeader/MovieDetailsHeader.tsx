@@ -20,6 +20,7 @@ function formatRating(rating?: number): string {
 export default () => {
     const [movie, dispatch] = useSelectedMovie();
     const displayLength = React.useMemo(() => formatMinutes(movie?.runtime), [movie?.runtime]);
+    React.useEffect(() => window.scrollTo(0, 0), [movie]);
 
     return (
         <header className={css.detailsAppHeader}>
