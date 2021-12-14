@@ -97,7 +97,7 @@ export default class MovieDbStateManager {
         const genres = MovieDbStateManager.getGenresFromMovies(moviesList);
         const activeGenre = state.activeGenre && genres.includes(state.activeGenre) ? state.activeGenre : undefined;
         const filteredMoviesList = MovieDbStateManager.getFilteredMoviesList(moviesList, activeGenre);
-        const selectedMovie = movie.id === (state.selectedMovie && state.selectedMovie.id) ? moviesList[index] : state.selectedMovie;
+        const selectedMovie = movie.id === state.selectedMovie?.id ? moviesList[index] : state.selectedMovie;
         return {
             ...state, moviesList, genres, filteredMoviesList, activeGenre,
             selectedMovie,
