@@ -1,8 +1,6 @@
 import * as React from 'react';
-import { ActionType, MovieDbStateAction } from '../../types/movieActions';
-import MovieContext from '../../types/movieContext';
-import { Movie } from '../../types/movieModels';
-import AddButton from '../AddButton';
+import useSelectedMovie from '../../hooks/useSelectedMovie';
+import { ActionType } from '../../types/movieActions';
 import MainLogo from '../MainLogo';
 import * as css from './MovieDetailsHeader.module.scss';
 
@@ -20,9 +18,7 @@ function formatRating(rating?: number): string {
     return rating.toPrecision(2)
 }
 export default () => {
-    const contextObj = React.useContext(MovieContext);
-    const movie = contextObj.state.selectedMovie;
-    const dispatch = contextObj.dispatch;
+    const [movie, dispatch] = useSelectedMovie();
     const displayLength = React.useMemo(() => formatMinutes(movie?.runtime), [movie?.runtime]);
 
     return (
