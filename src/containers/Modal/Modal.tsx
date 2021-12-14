@@ -6,20 +6,16 @@ interface ModalProps {
     initialModalRoot?: HTMLElement | null;
 }
 
-export default class Modal extends React.Component<ModalProps> {
-    componentDidMount() {
+export default (props: React.PropsWithChildren<ModalProps>) => {
+    React.useEffect(() => {
         document.body.style.overflow = 'hidden';
-    }
-
-    componentWillUnmount() {
-        document.body.style.overflow = 'unset';
-    }
-
-    render() {
-        return (
-            <Portal node={this.props.initialModalRoot}>
-                <BackgroundLayer>{this.props.children}</BackgroundLayer>,
-            </Portal>
-        );
-    }
+        return () => {
+            document.body.style.overflow = 'unset';
+        }
+    }, []);
+    return (
+        <Portal node={props.initialModalRoot}>
+            <BackgroundLayer>{props.children}</BackgroundLayer>,
+        </Portal>
+    );
 }
