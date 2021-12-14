@@ -1,37 +1,21 @@
 import * as React from 'react';
-import * as ReactDOM from 'react-dom';
+import { Portal } from 'react-portal';
 import BackgroundLayer from '../../components/BackgroundLayer/BackgroundLayer';
 
 interface ModalProps {
-    initialModalRootId: string
+    initialModalRoot?: HTMLElement | null;
 }
 
-export default class Modal extends React.Component<ModalProps> {
-    el: HTMLElement;
-    modalRoot: HTMLElement;
-    constructor(props: React.PropsWithChildren<ModalProps>) {
-        super(props);
-        this.el = document.createElement('div');
-        const modalRootEl = document.getElementById(props.initialModalRootId);
-        if (!modalRootEl) {
-            throw new Error(`Element with id '${props.initialModalRootId}' is not found`);
-        }
-        this.modalRoot = modalRootEl;
-    }
-
-    componentDidMount() {
+export default (props: React.PropsWithChildren<ModalProps>) => {
+    React.useEffect(() => {
         document.body.style.overflow = 'hidden';
-        this.modalRoot.appendChild(this.el);
-    }
-
-    componentWillUnmount() {
-        document.body.style.overflow = 'unset';
-        this.modalRoot.removeChild(this.el);
-    }
-
-    render() {
-        return ReactDOM.createPortal(
-            <BackgroundLayer>{this.props.children}</BackgroundLayer>,
-            this.el);
-    }
+        return () => {
+            document.body.style.overflow = 'unset';
+        }
+    }, []);
+    return (
+        <Portal node={props.initialModalRoot}>
+            <BackgroundLayer>{props.children}</BackgroundLayer>,
+        </Portal>
+    );
 }

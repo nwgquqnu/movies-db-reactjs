@@ -1,3 +1,3 @@
-import MovieDetailsHeader from "./MoveDetailsHeader";
+import MovieDetailsHeader from "./MovieDetailsHeader";
 
 export default MovieDetailsHeader;

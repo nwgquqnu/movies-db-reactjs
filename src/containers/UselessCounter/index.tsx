@@ -9,24 +9,19 @@ interface UselessCounterState {
 }
 
 export default class UselessCounter extends React.PureComponent<UselessCounterProps, UselessCounterState> {
-    constructor(props: UselessCounterProps) {
-        super(props);
-        this.state = { value: 0 };
-        this.handleDecrement = this.handleDecrement.bind(this);
-        this.handleIncrement = this.handleIncrement.bind(this);
-    }
+    state = { value: 0 };
 
-    handleIncrement() {
+    handleIncrement = () => {
         this.setState((prevState, prevProps) => ({
             value: prevState.value + prevProps.changeBy
         }));
-    }
+    };
 
-    handleDecrement() {
+    handleDecrement = () => {
         this.setState((prevState, prevProps) => ({
             value: prevState.value - prevProps.changeBy
         }));
-    }
+    };
 
     render() {
         return (

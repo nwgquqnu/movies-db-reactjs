@@ -1,3 +1,4 @@
+import clsx from 'clsx';
 import * as React from 'react';
 import * as css from './MainButton.module.scss'
 
@@ -10,7 +11,7 @@ interface ButtonProps {
 class MainButton extends React.PureComponent<ButtonProps> {
     render() {
         return React.createElement('button', {
-            className: `${css.mainButton} ${this.props.className || ""}`,
+            className: clsx(css.mainButton, this.props.className),
             onClick: this.props.handler
         }, this.props.text);
     }

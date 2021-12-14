@@ -1,7 +1,7 @@
 import * as React from 'react';
 import ResetButton from '../../components/ResetButton';
 import SubmitButton from '../../components/SubmitButton';
-import { NewMovie, newMovieFields, NewMovieKeys } from '../../types/movieModels';
+import { NewMovie, newMovieFields, NewMovieKeys, numericMovieFields } from '../../types/movieModels';
 import * as css from './ModifyMovieForm.module.scss';
 
 interface ModifyMovieFormProps<MovieType> {
@@ -26,50 +26,57 @@ export default class ModifyMovieForm<MovieType extends NewMovie> extends React.C
             errors: {},
             movie: (props.movie) ? props.movie : new props.emptyMovieCreator(),
         };
-        
-        this.handleChange = this.handleChange.bind(this);
-        this.handleMultiSelectChange = this.handleMultiSelectChange.bind(this);
-        this.handleSubmit = this.handleSubmit.bind(this);
-        this.handleReset = this.handleReset.bind(this);
     }
 
-    handleChange(event: React.ChangeEvent<HTMLInputElement|HTMLSelectElement|HTMLTextAreaElement>) {
+    handleChange = (event: React.ChangeEvent<HTMLInputElement | HTMLSelectElement | HTMLTextAreaElement>) => {
         event.preventDefault();
         event.stopPropagation();
         const currentTarget = event.currentTarget;
         const fieldName: NewMovieKeys = currentTarget.name as NewMovieKeys;
-        console.log(`change event name ${currentTarget.name} and value ${currentTarget.value}`)
 
-        this.setState(prevState =>(
+        this.setState(prevState => (
             {
-                movie: {...prevState.movie, [fieldName]: currentTarget.value },
-                errors: {...prevState.errors, [fieldName]: undefined },
+                movie: {
+                    ...prevState.movie,
+                    [fieldName]: this.parseFieldValue(fieldName, prevState.movie[fieldName], currentTarget.value)
+                },
+                errors: { ...prevState.errors, [fieldName]: undefined },
             }));
-    }
+    };
 
-    handleMultiSelectChange(event: React.ChangeEvent<HTMLSelectElement>) {
+    handleMultiSelectChange = (event: React.ChangeEvent<HTMLSelectElement>) => {
         event.preventDefault();
         event.stopPropagation();
         const currentTarget = event.currentTarget;
         const fieldName: NewMovieKeys = currentTarget.name as NewMovieKeys;
         var options = Array.from(currentTarget.selectedOptions, option => option.value);;
-        this.setState(prevState =>(
+        this.setState(prevState => (
             {
-                movie: {...prevState.movie, [fieldName]: options },
-                errors: {...prevState.errors, [fieldName]: undefined },
+                movie: { ...prevState.movie, [fieldName]: options },
+                errors: { ...prevState.errors, [fieldName]: undefined },
             }));
-      }
-    handleSubmit(event: React.SyntheticEvent<HTMLFormElement> | React.SyntheticEvent<HTMLButtonElement>) {
+    };
+
+    handleSubmit = (event: React.SyntheticEvent<HTMLFormElement> | React.SyntheticEvent<HTMLButtonElement>) => {
         event.preventDefault();
         event.stopPropagation();
         if (this.validateForm()) {
             this.props.submitHandler(this.state.movie);
         }
-    }
-    handleReset(event: React.SyntheticEvent<HTMLFormElement> | React.SyntheticEvent<HTMLButtonElement>) {
+    };
+
+    handleReset = (event: React.SyntheticEvent<HTMLFormElement> | React.SyntheticEvent<HTMLButtonElement>) => {
         event.preventDefault();
         event.stopPropagation();
-        this.setState((_, prevProps) => ({ movie: new prevProps.emptyMovieCreator(), errors: {}}));
+        this.setState((_, prevProps) => ({ movie: new prevProps.emptyMovieCreator(), errors: {} }));
+    };
+
+    parseFieldValue(fieldName: string, value: any, nextValue: string): number | string {
+        if (fieldName in numericMovieFields) {
+            const parsedNextValue = Number(nextValue);
+            return Number.isNaN(parsedNextValue) ? value : parsedNextValue;
+        }
+        return nextValue;
     }
 
     getPreviousYears(): Array<number> {
@@ -77,15 +84,14 @@ export default class ModifyMovieForm<MovieType extends NewMovie> extends React.C
         const year = date.getFullYear();
 
         const yearsArr = [];
-        for(let i = 0; i <= 50; i++) {
-            yearsArr.push(year-i);
+        for (let i = 0; i <= 50; i++) {
+            yearsArr.push(year - i);
         }
         return yearsArr;
     }
 
     validateForm(): boolean {
         let validationResult = true;
-        console.log(`validate form movie ${JSON.stringify(this.state.movie)}`)
         const errors: AddMovieErrors = {};
 
         if (!this.state.movie.title) {
@@ -121,8 +127,14 @@ export default class ModifyMovieForm<MovieType extends NewMovie> extends React.C
         return validationResult;
     }
 
-    getStringValue(n: number): string{
-        return n < 0 ? "" : "" + n;
+    getStringValue(n: number, precicion?: number): string {
+        if (n < 0) {
+            return "";
+        }
+        if (precicion) {
+            return n.toPrecision(precicion);
+        }
+        return "" + n;
     }
 
     render() {
@@ -155,14 +167,14 @@ export default class ModifyMovieForm<MovieType extends NewMovie> extends React.C
                             <span>Movie URL</span>
                             <input name={newMovieFields.posterUrl}
                                 type="url" value={this.state.movie.posterUrl}
-                                onChange={this.handleChange} placeholder="https://"/>
+                                onChange={this.handleChange} placeholder="https://" />
                             <span className={css.errorMessage}>{this.state.errors.posterUrl}</span>
                         </label>
                         <label>
                             <span>Rating</span>
                             <input name={newMovieFields.rating}
-                                type="text" value={this.getStringValue(this.state.movie.rating)}
-                                onChange={this.handleChange} pattern="\d+.?(\d{0,2})?" placeholder="7.8"/>
+                                type="text" value={this.getStringValue(this.state.movie.rating, 2)}
+                                onChange={this.handleChange} pattern="\d+.?(\d{0,2})?" placeholder="7.8" />
                             <span className={css.errorMessage}>{this.state.errors.rating}</span>
                         </label>
                         <label>
@@ -178,14 +190,14 @@ export default class ModifyMovieForm<MovieType extends NewMovie> extends React.C
                             <span>Runtime</span>
                             <input name={newMovieFields.runtime}
                                 type="text" value={this.getStringValue(this.state.movie.runtime)}
-                                onChange={this.handleChange} pattern="\d+" placeholder="minutes"/>
+                                onChange={this.handleChange} pattern="\d+" placeholder="minutes" />
                             <span className={css.errorMessage}>{this.state.errors.runtime}</span>
                         </label>
                         <label className={css.movieDescription}>
                             <span>Overview</span>
                             <textarea name={newMovieFields.description}
                                 value={this.state.movie.description}
-                                onChange={this.handleChange}/>
+                                onChange={this.handleChange} />
                             <span className={css.errorMessage}>{this.state.errors.description}</span>
                         </label>
                     </section>

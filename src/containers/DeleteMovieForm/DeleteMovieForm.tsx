@@ -10,25 +10,17 @@ interface DeleteMovieFormProps {
 }
 
 export default class DeleteMovieForm extends React.Component<DeleteMovieFormProps> {
-
-    constructor(props: DeleteMovieFormProps) {
-        super(props);
-        this.handleSubmit = this.handleSubmit.bind(this);
-        this.handleReset = this.handleReset.bind(this);
-    }
-
-  
-    handleSubmit(event: React.SyntheticEvent<HTMLFormElement> | React.SyntheticEvent<HTMLButtonElement>) {
+    handleSubmit = (event: React.SyntheticEvent<HTMLFormElement> | React.SyntheticEvent<HTMLButtonElement>) => {
         event.preventDefault();
         event.stopPropagation();
         this.props.dispatch({ type: ActionType.DeleteMovie, payload: this.props.movie.id});
-    }
+    };
 
-    handleReset(event: React.SyntheticEvent<HTMLFormElement> | React.SyntheticEvent<HTMLButtonElement>) {
+    handleReset = (event: React.SyntheticEvent<HTMLFormElement> | React.SyntheticEvent<HTMLButtonElement>) => {
         event.preventDefault();
         event.stopPropagation();
         this.props.dispatch({ type: ActionType.HideMovieUpdate });
-    }
+    };
 
     render() {
         return (

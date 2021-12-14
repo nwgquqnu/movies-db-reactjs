@@ -1,4 +1,5 @@
 import * as React from 'react';
+import clsx from 'clsx';
 import { ActionType, MovieDbStateAction } from '../../types/movieActions';
 import { Movie } from '../../types/movieModels';
 import * as css from './DetailsButton.module.scss';
@@ -28,12 +29,12 @@ export default ({ containerClassName, movie, dispatch }: DetailsButtonProps) => 
         [movie, dispatch],
     );
     return (
-        <nav className={`${css.detailsBtnContainer} ${containerClassName}`} role="navigation">
+        <nav className={clsx(css.detailsBtnContainer, containerClassName)} role="navigation">
             <ul>
-                <li className={css.detailsBtn}><a href="#" aria-haspopup="true">Details</a>
+                <li className={css.detailsBtn}><button aria-haspopup="true">Details</button>
                     <ul className="dropdown" aria-label="submenu">
-                        <li onClick={clickEditHandler}><a href="#">Edit</a></li>
-                        <li onClick={clickDeleteHandler}><a href="#">Delete</a></li>
+                        <li onClick={clickEditHandler}><button>Edit</button></li>
+                        <li onClick={clickDeleteHandler}><button>Delete</button></li>
                     </ul>
                 </li>
             </ul>

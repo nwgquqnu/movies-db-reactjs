@@ -9,23 +9,20 @@ interface SearchFormProps {
 
 interface SearchFormState {
     value: string;
-} 
+}
 
 export default class SearchForm extends React.Component<SearchFormProps, SearchFormState> {
-    constructor(props: SearchFormProps) {
-        super(props);
-        this.state = { value: '' };
-        this.handleChange = this.handleChange.bind(this);
-        this.handleSubmit = this.handleSubmit.bind(this);
-    }
+    state = { value: '' };
 
-    handleChange(event: React.ChangeEvent<HTMLInputElement>) {
+    handleChange = (event: React.ChangeEvent<HTMLInputElement>) => {
         this.setState({ value: event.target.value });
-    }
-    handleSubmit(event: React.SyntheticEvent<HTMLFormElement> | React.SyntheticEvent<HTMLButtonElement>) {
-        alert('A search text was submitted: ' + this.state.value);
+    };
+
+    handleSubmit = (event: React.SyntheticEvent<HTMLFormElement> | React.SyntheticEvent<HTMLButtonElement>) => {
         event.preventDefault();
-    }
+        event.stopPropagation();
+        alert('A search text was submitted: ' + this.state.value);
+    };
 
     render() {
         return (
