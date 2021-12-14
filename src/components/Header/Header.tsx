@@ -11,7 +11,7 @@ interface HeaderProps {
 
 export default (props: HeaderProps) => {
     if (props.selectedMovie) {
-        return <MovieDetailsHeader selectedMovie={props.selectedMovie} dispatch={props.dispatch}/>;
+        return <MovieDetailsHeader />;
     }
     return <SearchFormHeader dispatch={props.dispatch} />;
 };

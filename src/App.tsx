@@ -6,6 +6,7 @@ import Main from './components/Main';
 import ActivityDialog from './containers/ActivityDialog';
 import MovieDataFetcher from './Services/MovieDataFetcher';
 import MovieDbStateManager from './Services/StateManager';
+import MovieContext from './types/movieContext';
 
 function App() {
   const initialData = React.useMemo(() => MovieDataFetcher.fetchMovieData(), []);
@@ -15,10 +16,12 @@ function App() {
   const activityMovie = state.movieUnderUpdateActivity || null;
   return (
     <div className={css.app}>
-      <Header selectedMovie={state.selectedMovie} dispatch={dispatch}/>
-      <Main moviesList={state.filteredMoviesList} sortOrder={state.sortOrder} dispatch={dispatch} genres={state.genres} activeGenre={state.activeGenre}/>
-      <Footer />
-      <ActivityDialog dispatch={dispatch} currentUpdateActivity={updateActivity} activityMovie={activityMovie} genreList={allGenres}/>
+      <MovieContext.Provider value={{ state, dispatch }}>
+        <Header selectedMovie={state.selectedMovie} dispatch={dispatch} />
+        <Main moviesList={state.filteredMoviesList} sortOrder={state.sortOrder} dispatch={dispatch} genres={state.genres} activeGenre={state.activeGenre} />
+        <Footer />
+        <ActivityDialog dispatch={dispatch} currentUpdateActivity={updateActivity} activityMovie={activityMovie} genreList={allGenres} />
+      </MovieContext.Provider>
     </div>
   );
 }
