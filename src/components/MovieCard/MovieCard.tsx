@@ -9,6 +9,10 @@ interface MovieCardProps {
     dispatch: React.Dispatch<MovieDbStateAction>;
 }
 
+function getYear(date: string): string {
+    return date.slice(0, 4);
+}
+
 export default ({ movie, dispatch }: MovieCardProps) => {
     const selectMovieCallback = React.useCallback(
         () => dispatch({ type: ActionType.SelectMovie, payload: movie }),
@@ -18,11 +22,11 @@ export default ({ movie, dispatch }: MovieCardProps) => {
     return (
         <article className={css.movieArticle} onClick={selectMovieCallback}>
             <DetailsButton containerClassName={css.movieDetailsBtn} movie={movie} dispatch={dispatch} />
-            <img src={movie.posterUrl} alt={movie.title} />
+            <img src={movie.poster_path} alt={movie.title} />
             <div className={css.movieInfo}>
                 <h1 className={css.movieTitle}>{movie.title}</h1>
-                <p className={css.movieYear}>{movie.year}</p>
-                <p className={css.movieGenre}>{movie.genre.join(", ")}</p>
+                <p className={css.movieYear}>{getYear(movie.release_date)}</p>
+                <p className={css.movieGenre}>{movie.genres.join(", ")}</p>
             </div>
         </article>
     );

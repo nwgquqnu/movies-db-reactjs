@@ -15,12 +15,16 @@ interface ActivityDialogProps {
 class FormMovie implements Movie {
     id = ""
     title = "";
-    year = "";
-    genre = [];
-    posterUrl = "";
-    description = "";
+    release_date = "";
+    genres = [];
+    poster_path = "";
+    overview = "";
     runtime = -1;
-    rating = -1;
+    vote_average = -1;
+    vote_count = 0;
+    budget = -1;
+    tagline = "";
+    revenue = 0n;
 }
 
 export default ({ currentUpdateActivity, activityMovie: movie, dispatch, genreList }: ActivityDialogProps) => {

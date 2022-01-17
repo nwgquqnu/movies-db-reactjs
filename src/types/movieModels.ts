@@ -1,12 +1,49 @@
 export interface NewMovie {
+    // Movie title
+    // example: La La Land
     title: string;
-    year: string;
-    genre: string[];
-    posterUrl: string;
-    description: string;
+    // Movie tagline
+    // example: Here's to the fools who dream.
+    tagline: string;
+    // Movie average raiting
+    // example: 7.9
+    vote_average: number;
+    
+    // Total count of votes for the movie
+    // example: 6782
+    vote_count:	number;
+    
+    // Movie release date
+    // example: 2016-12-29
+    release_date: string;
+    
+    // Url to the poster image
+    // example: https://image.tmdb.org/t/p/w500/ylXCdC106IKiarftHkcacasaAcb.jpg
+    poster_path: string;
+    
+    // Short description of the movie
+    // example: Mia, an aspiring actress, serves lattes to movie stars in between auditions and Sebastian, a jazz musician, scrapes by playing cocktail party gigs in dingy bars, but as success mounts they are faced with decisions that begin to fray the fragile fabric of their love affair, and the dreams they worked so hard to maintain in each other threaten to rip them apart.
+    overview: string;
+    
+    // Movie production budget
+    // minimum: 0
+    // example: 30000000
+    budget:	number;
+    
+    // Movie revenue
+    // example: 445435700
+    // minimum: 0
+    revenue: bigint;
+    
+    // Movie duration time
+    // example: 128
+    // minimum: 0
     runtime: number;
-    rating: number;
+    
+    genres: string[];
 }
+
+
 
 export type NewMovieKeys = keyof NewMovie;
 
@@ -22,17 +59,24 @@ type PickByType<T, Value> = {
 
 export const newMovieFields = Object.freeze<NewMovieFields>({
     title: "title",
-    year: "year",
-    genre: "genre",
-    posterUrl: "posterUrl",
-    description: "description",
+    tagline: "tagline",
+    vote_average: "vote_average",
+    vote_count: "vote_count",
+    release_date: "release_date",
+    poster_path: "poster_path",
+    overview: "overview",
+    budget: "budget",
+    revenue: "revenue",
     runtime: "runtime",
-    rating: "rating",
+    genres: "genres",
 });
 
-export const numericMovieFields = Object.freeze<SameKeyAndValue<PickByType<NewMovie, number>>>({
+export const numericMovieFields = Object.freeze<SameKeyAndValue<PickByType<NewMovie, number> & PickByType<NewMovie, bigint>>>({
+    vote_average: "vote_average",
+    vote_count: "vote_count",
+    budget: "budget",
+    revenue: "revenue",
     runtime: "runtime",
-    rating: "rating",
 })
 
 export interface Movie extends NewMovie {

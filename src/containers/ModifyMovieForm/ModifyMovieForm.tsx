@@ -81,11 +81,11 @@ export default class ModifyMovieForm<MovieType extends NewMovie> extends React.C
 
     getPreviousYears(): Array<number> {
         const date = new Date();
-        const year = date.getFullYear();
+        const release_date = date.getFullYear();
 
         const yearsArr = [];
         for (let i = 0; i <= 50; i++) {
-            yearsArr.push(year - i);
+            yearsArr.push(release_date - i);
         }
         return yearsArr;
     }
@@ -98,24 +98,24 @@ export default class ModifyMovieForm<MovieType extends NewMovie> extends React.C
             errors.title = "Cannot be empty";
             validationResult = false;
         }
-        if (!this.state.movie.year) {
-            errors.year = "Cannot be empty";
+        if (!this.state.movie.release_date) {
+            errors.release_date = "Cannot be empty";
             validationResult = false;
         }
-        if (this.state.movie.genre.length === 0) {
-            errors.genre = "Cannot be empty";
+        if (this.state.movie.genres.length === 0) {
+            errors.genres = "Cannot be empty";
             validationResult = false;
         }
-        if (!this.state.movie.posterUrl) {
-            errors.posterUrl = "Cannot be empty";
+        if (!this.state.movie.poster_path) {
+            errors.poster_path = "Cannot be empty";
             validationResult = false;
         }
-        if (!this.state.movie.description) {
-            errors.description = "Cannot be empty";
+        if (!this.state.movie.overview) {
+            errors.overview = "Cannot be empty";
             validationResult = false;
         }
-        if (this.state.movie.rating <= 0) {
-            errors.rating = "Cannot be empty";
+        if (this.state.movie.vote_average <= 0) {
+            errors.vote_average = "Cannot be empty";
             validationResult = false;
         }
         if (this.state.movie.runtime <= 0) {
@@ -155,36 +155,36 @@ export default class ModifyMovieForm<MovieType extends NewMovie> extends React.C
                         </label>
                         <label>
                             <span>Release Date</span>
-                            <select name={newMovieFields.year} value={this.state.movie.year} onChange={this.handleChange} placeholder="Release Date">
+                            <select name={newMovieFields.release_date} value={this.state.movie.release_date} onChange={this.handleChange} placeholder="Release Date">
                                 <option value=""></option>
-                                {this.getPreviousYears().map(year => (
-                                    <option key={year} value={year}>{year}</option>
+                                {this.getPreviousYears().map(release_date => (
+                                    <option key={release_date} value={release_date}>{release_date}</option>
                                 ))}
                             </select>
-                            <span className={css.errorMessage}>{this.state.errors.year}</span>
+                            <span className={css.errorMessage}>{this.state.errors.release_date}</span>
                         </label>
                         <label>
                             <span>Movie URL</span>
-                            <input name={newMovieFields.posterUrl}
-                                type="url" value={this.state.movie.posterUrl}
+                            <input name={newMovieFields.poster_path}
+                                type="url" value={this.state.movie.poster_path}
                                 onChange={this.handleChange} placeholder="https://" />
-                            <span className={css.errorMessage}>{this.state.errors.posterUrl}</span>
+                            <span className={css.errorMessage}>{this.state.errors.poster_path}</span>
                         </label>
                         <label>
-                            <span>Rating</span>
-                            <input name={newMovieFields.rating}
-                                type="text" value={this.getStringValue(this.state.movie.rating, 2)}
+                            <span>VoteAverage</span>
+                            <input name={newMovieFields.vote_average}
+                                type="text" value={this.getStringValue(this.state.movie.vote_average, 2)}
                                 onChange={this.handleChange} pattern="\d+.?(\d{0,2})?" placeholder="7.8" />
-                            <span className={css.errorMessage}>{this.state.errors.rating}</span>
+                            <span className={css.errorMessage}>{this.state.errors.vote_average}</span>
                         </label>
                         <label>
                             <span>Genre</span>
-                            <select name={newMovieFields.genre} multiple={true} value={this.state.movie.genre} onChange={this.handleMultiSelectChange}>
+                            <select name={newMovieFields.genres} multiple={true} value={this.state.movie.genres} onChange={this.handleMultiSelectChange}>
                                 {this.props.genreList.map(genre => (
                                     <option key={genre} value={genre}>{genre}</option>
                                 ))}
                             </select>
-                            <span className={css.errorMessage}>{this.state.errors.genre}</span>
+                            <span className={css.errorMessage}>{this.state.errors.genres}</span>
                         </label>
                         <label>
                             <span>Runtime</span>
@@ -195,10 +195,10 @@ export default class ModifyMovieForm<MovieType extends NewMovie> extends React.C
                         </label>
                         <label className={css.movieDescription}>
                             <span>Overview</span>
-                            <textarea name={newMovieFields.description}
-                                value={this.state.movie.description}
+                            <textarea name={newMovieFields.overview}
+                                value={this.state.movie.overview}
                                 onChange={this.handleChange} />
-                            <span className={css.errorMessage}>{this.state.errors.description}</span>
+                            <span className={css.errorMessage}>{this.state.errors.overview}</span>
                         </label>
                     </section>
 

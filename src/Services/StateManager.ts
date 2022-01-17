@@ -8,8 +8,8 @@ type SortOrderHandlers = Record<SortOrder, SortHandler>;
 const sortOrderHandlers: SortOrderHandlers = {
     [SortOrder.ByNameAsc]: (m1: Movie, m2: Movie) => m1.title.toLocaleLowerCase().localeCompare(m2.title.toLocaleLowerCase()),
     [SortOrder.ByNameDesc]: (m1: Movie, m2: Movie) => m2.title.toLocaleLowerCase().localeCompare(m1.title.toLocaleLowerCase()),
-    [SortOrder.ByReleaseAsc]: (m1: Movie, m2: Movie) => m1.year.localeCompare(m2.year),
-    [SortOrder.ByReleaseDesc]: (m1: Movie, m2: Movie) => m2.year.localeCompare(m1.year),
+    [SortOrder.ByReleaseAsc]: (m1: Movie, m2: Movie) => m1.release_date.localeCompare(m2.release_date),
+    [SortOrder.ByReleaseDesc]: (m1: Movie, m2: Movie) => m2.release_date.localeCompare(m1.release_date),
 };
 
 export default class MovieDbStateManager {
@@ -63,7 +63,7 @@ export default class MovieDbStateManager {
 
     private static generateId(movie: Readonly<NewMovie>, moviesList: ReadonlyArray<Movie>): string {
         const firstTitleLetters = movie.title.split(" ").map(word => word[0]).join().toLowerCase();
-        const initialId = firstTitleLetters + movie.year;
+        const initialId = firstTitleLetters + movie.release_date;
         const moviesIdsSet: ReadonlySet<string> = new Set(moviesList.map(m => m.id));
         let finalId = initialId;
         let nextIndex = 1;
@@ -132,11 +132,11 @@ export default class MovieDbStateManager {
         if (!activeGenre) {
             return moviesList;
         }
-        return moviesList.filter(movie => movie.genre.includes(activeGenre));
+        return moviesList.filter(movie => movie.genres.includes(activeGenre));
     }
 
     private static getGenresFromMovies(moviesList: ReadonlyArray<Movie>): ReadonlyArray<string> {
-        return [...new Set(moviesList.flatMap(m => m.genre))].sort();
+        return [...new Set(moviesList.flatMap(m => m.genres))].sort();
     }
 
 }
