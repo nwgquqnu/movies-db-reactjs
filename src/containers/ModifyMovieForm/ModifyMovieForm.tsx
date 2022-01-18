@@ -61,7 +61,8 @@ export default class ModifyMovieForm<MovieType extends NewMovie> extends React.C
         event.preventDefault();
         event.stopPropagation();
         if (this.validateForm()) {
-            this.props.submitHandler(this.state.movie);
+            const movie = this.getMovieForSubmit();
+            this.props.submitHandler(movie);
         }
     };
 
@@ -88,6 +89,14 @@ export default class ModifyMovieForm<MovieType extends NewMovie> extends React.C
             yearsArr.push(release_date - i);
         }
         return yearsArr;
+    }
+
+    getMovieForSubmit(): MovieType {
+        const movie = this.state.movie;
+        if (!movie.tagline) {
+            movie.tagline = "This should not be empty but it is";
+        }
+        return movie;
     }
 
     validateForm(): boolean {

@@ -1,4 +1,3 @@
-import { createAsyncThunk, PayloadAction } from '@reduxjs/toolkit'
 import { MovieApi } from '../Services/MovieDataFetcher';
 import { ActionType, FetchedGenresAction, FetchedMoviesAction } from '../types/movieActions';
 import { FetchApiMoviesParams, Movie, MovieDbState, NewMovie, newMovieFields, SortOrder } from '../types/movieModels';
@@ -9,11 +8,6 @@ type FetchMoviesParams = {
     search?: string;
     activeGenre?: string | null;
 }
-
-type ActionPayload = {
-    list: ReadonlyArray<Movie>,
-    transformations: FetchApiMoviesParams,
-};
 
 //synchronous action creator
 const fetchMoviesSuccess = (movies: ReadonlyArray<Movie>, params: FetchApiMoviesParams): FetchedMoviesAction => ({
@@ -110,25 +104,6 @@ export const fetchGenres = () => {
         }
     }
 };
-
-// export const fetchMoviesAT = createAsyncThunk<ActionPayload, FetchApiMoviesParams, { state: MovieDbState }>(
-//     ActionType.FetchedMovies,
-//     async (config: FetchApiMoviesParams, { getState }) => {
-//         const state = getState();
-//         const response = await MovieApi.fetchMovieData(
-//             getSortBy(state.sortOrder) || config.sortBy,
-//             getSortDirection(state.sortOrder) || config.sortOrder,
-//             config.search,
-//             config.searchBy,
-//             state.activeGenre && [state.activeGenre] || config.filter
-//         );
-//         // The value we return becomes the `fulfilled` action payload
-//         return {
-//             list: response,
-//             transformations: config,
-//         };
-//     }
-// );
 
 function getSortBy(order: SortOrder): string {
     switch (order) {

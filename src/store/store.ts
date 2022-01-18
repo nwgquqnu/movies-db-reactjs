@@ -1,20 +1,8 @@
-import { configureStore, ThunkAction, Action } from '@reduxjs/toolkit';
-import counterReducer from './counterSlice'
-import moviesSlice from './moviesSlice';
+import { Action, configureStore, ThunkAction } from '@reduxjs/toolkit';
 import { rootReducer } from './rootReducer';
-
-const initialState = { value: 0 }
-
 
 export const store = configureStore({
     reducer: rootReducer,
-    // preloadedState: initialState,
-    
-
-    // reducer: {
-    //   counter: counterReducer,
-    //   movies: moviesSlice,
-    // }
   });
 
   // Infer the `RootState` and `AppDispatch` types from the store itself
