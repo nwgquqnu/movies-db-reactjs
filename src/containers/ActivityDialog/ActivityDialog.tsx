@@ -4,15 +4,8 @@ import { Movie, NewMovie, UpdateActivity } from '../../types/movieModels';
 import ModifyMovieForm from '../ModifyMovieForm';
 import DeleteMovieForm from '../DeleteMovieForm';
 import Modal from '../Modal';
-import { AppDispatch } from '../../store/store';
 import { addMovie, updateMovie } from '../../store/moviesThunk';
-
-interface ActivityDialogProps {
-    currentUpdateActivity: UpdateActivity | null;
-    activityMovie: Movie | null;
-    genreList: ReadonlyArray<string>;
-    dispatch: AppDispatch;
-}
+import { useAppDispatch, useAppSelector } from '../../hooks/storeHooks';
 
 class FormMovie implements Movie {
     id = ""
@@ -29,7 +22,12 @@ class FormMovie implements Movie {
     revenue = 0;
 }
 
-export default ({ currentUpdateActivity, activityMovie: movie, dispatch, genreList }: ActivityDialogProps) => {
+export default () => {
+    const dispatch = useAppDispatch();
+    const genreList = useAppSelector(state => state.genres);
+    const currentUpdateActivity = useAppSelector(state => state.currentUpdateActivity || null);
+    const movie = useAppSelector(state => state.movieUnderUpdateActivity || null);
+
     const closeHandler = () => dispatch({ type: ActionType.HideMovieUpdate });
     const addSubmitHandler = (movie: Movie) => {
         const movieWithoutId: Omit<Movie, "id"> & Pick<Partial<Movie>, "id"> = movie;
