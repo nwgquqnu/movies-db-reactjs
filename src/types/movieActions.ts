@@ -1,4 +1,4 @@
-import { Movie, NewMovie, SortOrder } from "./movieModels";
+import { FetchedMoviesPayload, Movie, NewMovie, SortOrder } from "./movieModels";
 
 export enum ActionType {
     AddMovie = "ADD_MOVIE",
@@ -11,6 +11,9 @@ export enum ActionType {
     ShowEditMovie = "SHOW_EDIT_MOVIE",
     HideMovieUpdate = "HIDE_MOVIE_UPDATE",
     ActiveGenreChange = "ACTIVE_GENRE_CHANCE",
+    FetchedMovies = "FETCHED_MOVIES",
+    FetchedGenres = "FETCHED_GENRES",
+
 }
 
 interface NoPayloadAction {
@@ -47,6 +50,16 @@ interface SortMoviesAction {
     payload: SortOrder;
 }
 
+export interface FetchedMoviesAction {
+    type: ActionType.FetchedMovies;
+    payload: FetchedMoviesPayload;
+}
+
+export interface FetchedGenresAction {
+    type: ActionType.FetchedGenres;
+    payload: ReadonlyArray<string>;
+}
+
 export type MovieDbStateAction = (
     AddMovieAction
     | DeleteMovieAction
@@ -55,4 +68,6 @@ export type MovieDbStateAction = (
     | SortMoviesAction
     | NoPayloadAction
     | ActiveGenreChangeAction
+    | FetchedMoviesAction
+    | FetchedGenresAction
 );

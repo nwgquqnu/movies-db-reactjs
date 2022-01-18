@@ -33,7 +33,7 @@ export interface NewMovie {
     // Movie revenue
     // example: 445435700
     // minimum: 0
-    revenue: bigint;
+    revenue: number;
     
     // Movie duration time
     // example: 128
@@ -96,6 +96,22 @@ export enum UpdateActivity {
     deleteActivity = "DELETE_ACTIVITY",
 }
 
+type SearchByType = "title" | "genre";
+
+export type FetchApiMoviesParams = {
+    sortBy?: string,
+    sortOrder?: "asc" | "desc",
+    search?: string,
+    searchBy?: SearchByType,
+    filter?: string[]
+};
+
+export type FetchedMoviesPayload = {
+    list: ReadonlyArray<Movie>,
+    params: FetchApiMoviesParams,
+};
+
+
 export interface MovieDbState {
     readonly moviesList: ReadonlyArray<Movie>;
     readonly filteredMoviesList: ReadonlyArray<Movie>;
@@ -105,4 +121,6 @@ export interface MovieDbState {
     readonly sortOrder: SortOrder;
     readonly movieUnderUpdateActivity?: Readonly<Movie>;
     readonly currentUpdateActivity?: UpdateActivity;
+    readonly searchText?: string;
+    readonly searchBy?: SearchByType;
 }

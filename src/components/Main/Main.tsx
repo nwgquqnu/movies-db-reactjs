@@ -7,30 +7,29 @@ import MovieSortBy from '../MovieSortBy/MovieSortBy';
 import ErrorBoundary from '../../containers/ErrorBoundary';
 import { MovieDbStateAction } from '../../types/movieActions';
 import { Movie, SortOrder, UpdateActivity } from '../../types/movieModels';
+import { useAppDispatch, useAppSelector } from '../../hooks/storeHooks';
 
-interface MainProps {
-    activeGenre?: string;
-    genres: ReadonlyArray<string>;
-    moviesList: ReadonlyArray<Movie>;
-    sortOrder: SortOrder;
-    dispatch: React.Dispatch<MovieDbStateAction>;
-}
-
-export default (props: MainProps) => (
+export default () => {
+    const dispatch = useAppDispatch();
+    const activeGenre = useAppSelector(state => state.activeGenre);
+    const genres = useAppSelector(state => state.genres);
+    const moviesList = useAppSelector(state => state.moviesList);
+    const sortOrder = useAppSelector(state => state.sortOrder);
+    return (
     <main className={css.appMain}>
         <ErrorBoundary>
             <nav className={css.navPanel}>
-                <GenreToggle activeGenre={props.activeGenre} genres={props.genres} dispatch={props.dispatch} />
-                <MovieSortBy sortOrder={props.sortOrder} dispatch={props.dispatch} />
+                <GenreToggle activeGenre={activeGenre} genres={genres} dispatch={dispatch} />
+                <MovieSortBy sortOrder={sortOrder} dispatch={dispatch} />
             </nav>
-            <MovieCounter count={props.moviesList.length} />
+            <MovieCounter count={moviesList.length} />
             <div className={css.movieContainer}>
-                {props.moviesList.map((movieData) => (
+                {moviesList.map((movieData) => (
                     <MovieCard key={movieData.id}
-                        dispatch={props.dispatch}
+                        dispatch={dispatch}
                         movie={movieData} />
                 ))}
             </div>
         </ErrorBoundary>
     </main>
-);
+)};

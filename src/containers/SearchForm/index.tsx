@@ -1,10 +1,13 @@
 import * as React from 'react';
 import FindInput from '../../components/FindInput';
 import SearchButton from '../../components/SearchButton';
+import { fetchMovies } from '../../store/moviesThunk';
+import { AppDispatch } from '../../store/store';
 
 interface SearchFormProps {
     placeholder: string;
     className: string;
+    dispatch: AppDispatch;
 }
 
 interface SearchFormState {
@@ -21,7 +24,7 @@ export default class SearchForm extends React.Component<SearchFormProps, SearchF
     handleSubmit = (event: React.SyntheticEvent<HTMLFormElement> | React.SyntheticEvent<HTMLButtonElement>) => {
         event.preventDefault();
         event.stopPropagation();
-        alert('A search text was submitted: ' + this.state.value);
+        this.props.dispatch(fetchMovies({search: this.state.value}));
     };
 
     render() {

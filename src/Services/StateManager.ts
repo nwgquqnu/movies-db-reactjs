@@ -43,6 +43,9 @@ export default class MovieDbStateManager {
                 return MovieDbStateManager.handleShowHideAction(state);
             case ActionType.ActiveGenreChange:
                 return MovieDbStateManager.handleActiveGenreChange(state, action.payload);
+            case ActionType.FetchedMovies:
+            case ActionType.FetchedGenres:
+                return state;
             default:
                 const _exhaustiveCheck: never = action;
                 return _exhaustiveCheck;
