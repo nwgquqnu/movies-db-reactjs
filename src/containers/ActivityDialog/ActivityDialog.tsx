@@ -4,38 +4,41 @@ import { Movie, NewMovie, UpdateActivity } from '../../types/movieModels';
 import ModifyMovieForm from '../ModifyMovieForm';
 import DeleteMovieForm from '../DeleteMovieForm';
 import Modal from '../Modal';
-
-interface ActivityDialogProps {
-    currentUpdateActivity: UpdateActivity | null;
-    activityMovie: Movie | null;
-    genreList: ReadonlyArray<string>;
-    dispatch: React.Dispatch<MovieDbStateAction>;
-}
+import { addMovie, updateMovie } from '../../store/moviesThunk';
+import { useAppDispatch, useAppSelector } from '../../hooks/storeHooks';
 
 class FormMovie implements Movie {
     id = ""
     title = "";
-    year = "";
-    genre = [];
-    posterUrl = "";
-    description = "";
+    release_date = "";
+    genres = [];
+    poster_path = "";
+    overview = "";
     runtime = -1;
-    rating = -1;
+    vote_average = -1;
+    vote_count = 0;
+    budget = 0;
+    tagline = "some tagline";
+    revenue = 0;
 }
 
-export default ({ currentUpdateActivity, activityMovie: movie, dispatch, genreList }: ActivityDialogProps) => {
-    const closeHandler = React.useCallback(
-        () => dispatch({ type: ActionType.HideMovieUpdate }),
-        [dispatch],
-    );
-    const addSubmitHandler = React.useCallback(
-        (movie: NewMovie) => dispatch({ type: ActionType.AddMovie, payload: movie }),
-        [dispatch],
-    );
-    const editSubmitHandler = React.useCallback(
-        (movie: Movie) => dispatch({ type: ActionType.EditMovie, payload: movie }),
-        [dispatch],
-    );
+export default () => {
+    const dispatch = useAppDispatch();
+    const genreList = useAppSelector(state => state.genres);
+    const currentUpdateActivity = useAppSelector(state => state.currentUpdateActivity || null);
+    const movie = useAppSelector(state => state.movieUnderUpdateActivity || null);
+
+    const closeHandler = () => dispatch({ type: ActionType.HideMovieUpdate });
+    const addSubmitHandler = (movie: Movie) => {
+        const movieWithoutId: Omit<Movie, "id"> & Pick<Partial<Movie>, "id"> = movie;
+        delete movieWithoutId.id;
+        dispatch(addMovie(movie));
+        closeHandler();
+    }
+    const editSubmitHandler = (movie: Movie) => {
+        dispatch(updateMovie(movie));
+        closeHandler();
+    }
     const domParent = React.useMemo(() => document && document.getElementById("modal"), []);
 
     let modal = null;

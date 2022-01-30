@@ -2,18 +2,17 @@ import * as React from 'react';
 import * as css from './MovieSortBy.module.scss';
 import { SortOrder } from '../../types/movieModels';
 import { ActionType, MovieDbStateAction } from '../../types/movieActions';
+import { AppDispatch } from '../../store/store';
+import { fetchMovies } from '../../store/moviesThunk';
 
 interface MovieSortByProps {
     sortOrder: SortOrder;
-    dispatch: React.Dispatch<MovieDbStateAction>;
+    dispatch: AppDispatch;
 }
 export default ({ sortOrder, dispatch }: MovieSortByProps) => {
-    const changeHandler = React.useCallback(
-        (event: React.ChangeEvent<HTMLSelectElement>) => {
-            dispatch({ type: ActionType.SortMovies, payload: event.currentTarget.value as SortOrder});
-        },
-        [dispatch],
-    );
+    const changeHandler = (event: React.ChangeEvent<HTMLSelectElement>) => {
+        dispatch(fetchMovies({ sortOrder: event.currentTarget.value as SortOrder}));
+    };
     return (
     <label className={css.movieSortBy}>
         <span>sort by</span>
