@@ -1,5 +1,5 @@
 import * as React from 'react'
-import { ActionType, MovieDbStateAction } from '../../types/movieActions';
+import { ActionType } from '../../types/movieActions';
 import { Movie, NewMovie, UpdateActivity } from '../../types/movieModels';
 import ModifyMovieForm from '../ModifyMovieForm';
 import DeleteMovieForm from '../DeleteMovieForm';

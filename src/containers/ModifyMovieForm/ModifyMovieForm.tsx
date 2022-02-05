@@ -1,3 +1,4 @@
+import { ErrorMessage, Field, Form, Formik, FormikErrors } from 'formik';
 import * as React from 'react';
 import ResetButton from '../../components/ResetButton';
 import SubmitButton from '../../components/SubmitButton';
@@ -13,211 +14,142 @@ interface ModifyMovieFormProps<MovieType> {
     closeHandler: () => void;
 }
 
-type AddMovieErrors = Partial<Record<keyof NewMovie, string>>;
-interface ModifyMovieFormState<MovieType extends NewMovie> {
-    errors: AddMovieErrors;
-    movie: MovieType;
+function isValidHttpUrl(testUrl: string) {
+    let url;
+    
+    try {
+      url = new URL(testUrl);
+    } catch (_) {
+      return false;  
+    }
+  
+    return url.protocol === "http:" || url.protocol === "https:";
+  }
+
+function validateForm(values: NewMovie): FormikErrors<NewMovie> {
+    const errors: FormikErrors<NewMovie> = {};
+
+    if (!values.title) {
+        errors.title = "Cannot be empty";
+    }
+
+    if (!values.release_date) {
+        errors.release_date = "Cannot be empty";
+    }
+    if (values.genres.length === 0) {
+        errors.genres = "Cannot be empty";
+    }
+    if (!values.poster_path) {
+        errors.poster_path = "Cannot be empty";
+    } else if (!isValidHttpUrl(values.poster_path)) {
+        errors.poster_path = "Is not valid url. It must start from http: or https:";
+    }
+    if (!values.overview) {
+        errors.overview = "Cannot be empty";
+    }
+    if (!String(values.vote_average) || values.vote_average <= 0) {
+        errors.vote_average = "Cannot be empty";
+    } else if (isNaN(+String(values.vote_average))) {
+        errors.vote_average = "Must be a numeric value";
+    }
+    if (!String(values.runtime) || values.runtime <= 0) {
+        errors.runtime = "Cannot be empty";
+    } else if (isNaN(+String(values.runtime))) {
+        errors.vote_average = "Must be a numeric value";
+    }
+    if (!values.tagline) {
+        errors.tagline = "Cannot be empty";
+    }
+    return errors;
 }
 
-export default class ModifyMovieForm<MovieType extends NewMovie> extends React.Component<ModifyMovieFormProps<MovieType>, ModifyMovieFormState<MovieType>> {
-    constructor(props: ModifyMovieFormProps<MovieType>) {
-        super(props);
-        this.state = {
-            errors: {},
-            movie: (props.movie) ? props.movie : new props.emptyMovieCreator(),
-        };
-    }
+function copyValuesForSubmit<MovieType extends NewMovie>(valueToChange: MovieType, modifiedValues: NewMovie): MovieType {
+    const modifiedValuesWithConvertedTypes: NewMovie = {...modifiedValues};
+    Object.keys(numericMovieFields).forEach((key: keyof typeof numericMovieFields) => {
+        modifiedValuesWithConvertedTypes[key] = +modifiedValuesWithConvertedTypes[key];
+    })
+    Object.entries(modifiedValuesWithConvertedTypes).forEach(<Key extends keyof NewMovie>([key, value]: [Key, NewMovie[Key]]) => {
+        (valueToChange as NewMovie)[key] = value;
+    })
+    return valueToChange;
+}
 
-    handleChange = (event: React.ChangeEvent<HTMLInputElement | HTMLSelectElement | HTMLTextAreaElement>) => {
-        event.preventDefault();
-        event.stopPropagation();
-        const currentTarget = event.currentTarget;
-        const fieldName: NewMovieKeys = currentTarget.name as NewMovieKeys;
+export default <MovieType extends NewMovie> (props: ModifyMovieFormProps<MovieType>) => {
+    const initialValues: MovieType = (props.movie) ? {...props.movie} : new props.emptyMovieCreator();
+    return (
+        <article className={css.modifyMovieContainer}>
+            <header>
+                <button onClick={props.closeHandler}>X</button>
+                <h1>{props.title}</h1>
+            </header>
+            <Formik
+                validate={validateForm}
+                initialValues={initialValues}
+                onSubmit={(values, actions) => {
+                    const appliedValues = copyValuesForSubmit(initialValues, values);
+                    props.submitHandler(appliedValues);
+                    actions.setSubmitting(false);         
+                  }}
+            >
+                {(formikProps) => (
 
-        this.setState(prevState => (
-            {
-                movie: {
-                    ...prevState.movie,
-                    [fieldName]: this.parseFieldValue(fieldName, prevState.movie[fieldName], currentTarget.value)
-                },
-                errors: { ...prevState.errors, [fieldName]: undefined },
-            }));
-    };
+                    <Form className={css.modifyMovieForm}>
+                        <section>
+                            <label>
+                                <span>Title</span>
+                                <Field name={newMovieFields.title}/>
+                                <ErrorMessage name={newMovieFields.title} className={css.errorMessage} component="span" />
+                            </label>
+                            <label>
+                                <span>Release Date</span>
+                                <Field name={newMovieFields.release_date} type="date" placeholder="Release Date"/>
+                                <ErrorMessage name={newMovieFields.release_date} className={css.errorMessage} component="span" />
+                            </label>
+                            <label>
+                                <span>Movie URL</span>
+                                <Field name={newMovieFields.poster_path} type="url" placeholder="https://"/>
+                                <ErrorMessage name={newMovieFields.poster_path} className={css.errorMessage} component="span" />
+                            </label>
+                            <label>
+                                <span>VoteAverage</span>
+                                <Field name={newMovieFields.vote_average} pattern="\d+.?(\d{0,2})?" placeholder="7.8"/>
+                                <ErrorMessage name={newMovieFields.vote_average} className={css.errorMessage} component="span" />
+                            </label>
+                            <label>
+                                <span>Genre</span>
+                                <Field name={newMovieFields.genres} as="select" multiple={true}>
+                                    {props.genreList.map(genre => (
+                                        <option key={genre} value={genre}>{genre}</option>
+                                    ))}
+                                </Field>
+                                <ErrorMessage name={newMovieFields.genres} className={css.errorMessage} component="span" />
+                            </label>
+                            <label>
+                                <span>Runtime</span>
+                                <Field name={newMovieFields.runtime} pattern="\d+" placeholder="minutes"/>
+                                <ErrorMessage name={newMovieFields.runtime} className={css.errorMessage} component="span" />
+                            </label>
+                            <label className={css.movieDescription}>
+                                <span>Overview</span>
+                                <Field name={newMovieFields.overview} as="textarea" />
+                                <ErrorMessage name={newMovieFields.overview} className={css.errorMessage} component="span" />
+                            </label>
+                            <label>
+                                <span>Tag line</span>
+                                <Field name={newMovieFields.tagline}/>
+                                <ErrorMessage name={newMovieFields.tagline} className={css.errorMessage} component="span" />
+                            </label>
+                        </section>
 
-    handleMultiSelectChange = (event: React.ChangeEvent<HTMLSelectElement>) => {
-        event.preventDefault();
-        event.stopPropagation();
-        const currentTarget = event.currentTarget;
-        const fieldName: NewMovieKeys = currentTarget.name as NewMovieKeys;
-        var options = Array.from(currentTarget.selectedOptions, option => option.value);;
-        this.setState(prevState => (
-            {
-                movie: { ...prevState.movie, [fieldName]: options },
-                errors: { ...prevState.errors, [fieldName]: undefined },
-            }));
-    };
+                        <footer>
+                            <ResetButton handler={formikProps.handleReset} />
+                            <SubmitButton handler={ e => formikProps.handleSubmit() } />
 
-    handleSubmit = (event: React.SyntheticEvent<HTMLFormElement> | React.SyntheticEvent<HTMLButtonElement>) => {
-        event.preventDefault();
-        event.stopPropagation();
-        if (this.validateForm()) {
-            const movie = this.getMovieForSubmit();
-            this.props.submitHandler(movie);
-        }
-    };
+                        </footer>
+                    </Form>
+                )}
 
-    handleReset = (event: React.SyntheticEvent<HTMLFormElement> | React.SyntheticEvent<HTMLButtonElement>) => {
-        event.preventDefault();
-        event.stopPropagation();
-        this.setState((_, prevProps) => ({ movie: new prevProps.emptyMovieCreator(), errors: {} }));
-    };
-
-    parseFieldValue(fieldName: string, value: any, nextValue: string): number | string {
-        if (fieldName in numericMovieFields) {
-            const parsedNextValue = Number(nextValue);
-            return Number.isNaN(parsedNextValue) ? value : parsedNextValue;
-        }
-        return nextValue;
-    }
-
-    getPreviousYears(): Array<number> {
-        const date = new Date();
-        const release_date = date.getFullYear();
-
-        const yearsArr = [];
-        for (let i = 0; i <= 50; i++) {
-            yearsArr.push(release_date - i);
-        }
-        return yearsArr;
-    }
-
-    getMovieForSubmit(): MovieType {
-        const movie = this.state.movie;
-        if (!movie.tagline) {
-            movie.tagline = "This should not be empty but it is";
-        }
-        return movie;
-    }
-
-    validateForm(): boolean {
-        let validationResult = true;
-        const errors: AddMovieErrors = {};
-
-        if (!this.state.movie.title) {
-            errors.title = "Cannot be empty";
-            validationResult = false;
-        }
-        if (!this.state.movie.release_date) {
-            errors.release_date = "Cannot be empty";
-            validationResult = false;
-        }
-        if (this.state.movie.genres.length === 0) {
-            errors.genres = "Cannot be empty";
-            validationResult = false;
-        }
-        if (!this.state.movie.poster_path) {
-            errors.poster_path = "Cannot be empty";
-            validationResult = false;
-        }
-        if (!this.state.movie.overview) {
-            errors.overview = "Cannot be empty";
-            validationResult = false;
-        }
-        if (this.state.movie.vote_average <= 0) {
-            errors.vote_average = "Cannot be empty";
-            validationResult = false;
-        }
-        if (this.state.movie.runtime <= 0) {
-            errors.runtime = "Cannot be empty";
-            validationResult = false;
-        }
-        this.setState({ errors });
-
-        return validationResult;
-    }
-
-    getStringValue(n: number, precicion?: number): string {
-        if (n < 0) {
-            return "";
-        }
-        if (precicion) {
-            return n.toPrecision(precicion);
-        }
-        return "" + n;
-    }
-
-    render() {
-        return (
-            <article className={css.modifyMovieContainer}>
-                <header>
-                    <button onClick={this.props.closeHandler}>X</button>
-                    <h1>{this.props.title}</h1>
-                </header>
-                <form className={css.modifyMovieForm} onSubmit={this.handleSubmit}>
-                    <section>
-                        <label>
-                            <span>Title</span>
-                            <input name={newMovieFields.title}
-                                type="text" value={this.state.movie.title}
-                                onChange={this.handleChange} />
-                            <span className={css.errorMessage}>{this.state.errors.title}</span>
-                        </label>
-                        <label>
-                            <span>Release Date</span>
-                            <select name={newMovieFields.release_date} value={this.state.movie.release_date} onChange={this.handleChange} placeholder="Release Date">
-                                <option value=""></option>
-                                {this.getPreviousYears().map(release_date => (
-                                    <option key={release_date} value={release_date}>{release_date}</option>
-                                ))}
-                            </select>
-                            <span className={css.errorMessage}>{this.state.errors.release_date}</span>
-                        </label>
-                        <label>
-                            <span>Movie URL</span>
-                            <input name={newMovieFields.poster_path}
-                                type="url" value={this.state.movie.poster_path}
-                                onChange={this.handleChange} placeholder="https://" />
-                            <span className={css.errorMessage}>{this.state.errors.poster_path}</span>
-                        </label>
-                        <label>
-                            <span>VoteAverage</span>
-                            <input name={newMovieFields.vote_average}
-                                type="text" value={this.getStringValue(this.state.movie.vote_average, 2)}
-                                onChange={this.handleChange} pattern="\d+.?(\d{0,2})?" placeholder="7.8" />
-                            <span className={css.errorMessage}>{this.state.errors.vote_average}</span>
-                        </label>
-                        <label>
-                            <span>Genre</span>
-                            <select name={newMovieFields.genres} multiple={true} value={this.state.movie.genres} onChange={this.handleMultiSelectChange}>
-                                {this.props.genreList.map(genre => (
-                                    <option key={genre} value={genre}>{genre}</option>
-                                ))}
-                            </select>
-                            <span className={css.errorMessage}>{this.state.errors.genres}</span>
-                        </label>
-                        <label>
-                            <span>Runtime</span>
-                            <input name={newMovieFields.runtime}
-                                type="text" value={this.getStringValue(this.state.movie.runtime)}
-                                onChange={this.handleChange} pattern="\d+" placeholder="minutes" />
-                            <span className={css.errorMessage}>{this.state.errors.runtime}</span>
-                        </label>
-                        <label className={css.movieDescription}>
-                            <span>Overview</span>
-                            <textarea name={newMovieFields.overview}
-                                value={this.state.movie.overview}
-                                onChange={this.handleChange} />
-                            <span className={css.errorMessage}>{this.state.errors.overview}</span>
-                        </label>
-                    </section>
-
-                    <footer>
-                        <ResetButton handler={this.handleReset} />
-                        <SubmitButton handler={this.handleSubmit} />
-
-                    </footer>
-                </form>
-            </article>
-        );
-    }
+            </Formik>
+        </article>
+    );
 }
