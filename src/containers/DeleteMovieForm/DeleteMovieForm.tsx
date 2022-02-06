@@ -3,10 +3,11 @@ import SubmitButton from '../../components/SubmitButton';
 import { deleteMovie } from '../../store/moviesThunk';
 import { AppDispatch } from '../../store/store';
 import { ActionType, MovieDbStateAction } from '../../types/movieActions';
-import { Movie } from '../../types/movieModels';
+import { FetchMoviesParams, Movie } from '../../types/movieModels';
 import * as css from './DeleteMovieForm.module.scss';
 
 interface DeleteMovieFormProps {
+    fetchParams: FetchMoviesParams,
     movie: Movie;
     dispatch: AppDispatch;
 }
@@ -15,7 +16,7 @@ export default class DeleteMovieForm extends React.Component<DeleteMovieFormProp
     handleSubmit = (event: React.SyntheticEvent<HTMLFormElement> | React.SyntheticEvent<HTMLButtonElement>) => {
         event.preventDefault();
         event.stopPropagation();
-        this.props.dispatch(deleteMovie(this.props.movie));
+        this.props.dispatch(deleteMovie(this.props.movie, this.props.fetchParams));
         this.props.dispatch({ type: ActionType.HideMovieUpdate });
     };
 

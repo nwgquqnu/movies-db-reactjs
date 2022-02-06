@@ -1,4 +1,6 @@
 import * as React from 'react';
+import { URLSearchParamsInit, useSearchParams } from 'react-router-dom';
+import useSearchParamMovieId from '../../hooks/useSearchParamMovieId';
 import { ActionType, MovieDbStateAction } from '../../types/movieActions';
 import { Movie } from '../../types/movieModels';
 import DetailsButton from '../DetailsButton';
@@ -14,13 +16,10 @@ function getYear(date: string): string {
 }
 
 export default ({ movie, dispatch }: MovieCardProps) => {
-    const selectMovieCallback = React.useCallback(
-        () => dispatch({ type: ActionType.SelectMovie, payload: movie }),
-        [dispatch],
-    );
+    const [_, setSearchParamMovieId] = useSearchParamMovieId();
 
     return (
-        <article className={css.movieArticle} onClick={selectMovieCallback}>
+        <article className={css.movieArticle} onClick={() => setSearchParamMovieId(movie.id)}>
             <DetailsButton containerClassName={css.movieDetailsBtn} movie={movie} dispatch={dispatch} />
             <img src={movie.poster_path} alt={movie.title} />
             <div className={css.movieInfo}>

@@ -1,10 +1,30 @@
 import * as React from "react";
-import { MovieDbStateAction } from "../types/movieActions";
+import { MovieApi } from "../Services/MovieDataFetcher";
 import { Movie } from "../types/movieModels";
-import { useAppDispatch, useAppSelector } from "./storeHooks";
+import useSearchParamMovieId from "./useSearchParamMovieId";
 
-export default (): [Readonly<Movie> | undefined, React.Dispatch<Readonly<MovieDbStateAction>>] => {
-    const dispatch = useAppDispatch();
-    const movie = useAppSelector(state => state.selectedMovie);
-    return [movie, dispatch];
-};
+export default (): [Movie | null, (movieId?: number | undefined) => void] => {
+    const [movieId, setSearchParamMovieId] = useSearchParamMovieId();
+    const [stateMovie, setMovie] = React.useState<Movie | null>(null);
+
+    React.useEffect(() => {
+        let cancelled = false;
+        if (movieId) {
+            MovieApi.getMovie(movieId).
+                then(movie => {
+                    if (!cancelled) {
+                        setMovie(movie)
+                    }
+                }).
+                catch(console.log);
+        }
+        return () => {
+            cancelled = true;
+        };
+    }, [movieId]);
+
+    return [
+        stateMovie,
+        setSearchParamMovieId
+    ]
+}

@@ -6,9 +6,10 @@ import DeleteMovieForm from '../DeleteMovieForm';
 import Modal from '../Modal';
 import { addMovie, updateMovie } from '../../store/moviesThunk';
 import { useAppDispatch, useAppSelector } from '../../hooks/storeHooks';
+import useFetchParams from '../../hooks/useFetchParams';
 
 class FormMovie implements Movie {
-    id = ""
+    id = 0
     title = "";
     release_date = "";
     genres = [];
@@ -29,14 +30,15 @@ export default () => {
     const movie = useAppSelector(state => state.movieUnderUpdateActivity || null);
 
     const closeHandler = () => dispatch({ type: ActionType.HideMovieUpdate });
+    const fetchParams = useFetchParams();
     const addSubmitHandler = (movie: Movie) => {
         const movieWithoutId: Omit<Movie, "id"> & Pick<Partial<Movie>, "id"> = movie;
         delete movieWithoutId.id;
-        dispatch(addMovie(movie));
+        dispatch(addMovie(movie, fetchParams));
         closeHandler();
     }
     const editSubmitHandler = (movie: Movie) => {
-        dispatch(updateMovie(movie));
+        dispatch(updateMovie(movie, fetchParams));
         closeHandler();
     }
     const domParent = React.useMemo(() => document && document.getElementById("modal"), []);
@@ -68,7 +70,7 @@ export default () => {
     } else if (currentUpdateActivity === UpdateActivity.deleteActivity) {
         modal = (
             <Modal initialModalRoot={domParent}>
-                <DeleteMovieForm dispatch={dispatch} movie={movie!} />
+                <DeleteMovieForm dispatch={dispatch} movie={movie!} fetchParams={fetchParams} />
             </Modal>
         )
     }

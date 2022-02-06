@@ -1,4 +1,4 @@
-import { Movie, NewMovie } from "../types/movieModels";
+import { FetchApiMoviesParams, Movie, NewMovie } from "../types/movieModels";
 
 const moviesBaseUrl = "http://localhost:4000/movies";
 
@@ -25,19 +25,10 @@ const genreList = [
 ].sort();
 
 const MovieDataFetcherAPI = {
-    fetchMovieData: (
-        sortBy?: string,
-        sortOrder?: "asc" | "desc",
-        search?: string,
-        searchBy?: "title" | "genre",
-        filter?: string[],
-    ): Promise<ReadonlyArray<Movie>> => {
+    fetchMovieData: (fetchParams: FetchApiMoviesParams): Promise<ReadonlyArray<Movie>> => {
         const params: string[][] = Object.entries({
-            sortBy,
-            sortOrder,
-            search,
-            searchBy,
-            filter: filter?.join(",")
+            ...fetchParams,
+            filter: fetchParams.filter?.join(",")
         }).filter(entry => entry[1]) as Array<[string, string]>;
         return fetch(moviesBaseUrl + "?" + new URLSearchParams(params)).
             then(response => response.json()).
@@ -65,6 +56,10 @@ const MovieDataFetcherAPI = {
         return fetch(moviesBaseUrl + "/" + movie.id, {
             method: "DELETE",
         }).then(response => response.status);
+    },
+    getMovie: (movieId: number): Promise<Movie> => {
+        return fetch(moviesBaseUrl + "/" + movieId).
+            then(response => response.json());
     },
 
     fetchGenreList: (): Promise<ReadonlyArray<string>> => Promise.resolve(genreList),
