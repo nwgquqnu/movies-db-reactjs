@@ -80,7 +80,7 @@ export const numericMovieFields = Object.freeze<SameKeyAndValue<PickByType<NewMo
 })
 
 export interface Movie extends NewMovie {
-    id: string;
+    id: number;
 }
 
 export enum SortOrder {
@@ -89,6 +89,8 @@ export enum SortOrder {
     ByReleaseAsc = "BY_RELEASE_ASC",
     ByReleaseDesc = "BY_RELEASE_DESC",
 }
+
+export const DEFAULT_SORT_ORDER = SortOrder.ByNameAsc;
 
 export enum UpdateActivity {
     addActivity = "ADD_ACTIVITY",
@@ -106,20 +108,25 @@ export type FetchApiMoviesParams = {
     filter?: string[]
 };
 
+export type FetchMoviesParams = {
+    sortOrder?: SortOrder;
+    search?: string;
+    activeGenre?: string | null;
+}
+
 export type FetchedMoviesPayload = {
     list: ReadonlyArray<Movie>,
     params: FetchApiMoviesParams,
 };
 
+export type SearchPathParams = {
+    searchQuery: string;
+}
+
 
 export interface MovieDbState {
     readonly moviesList: ReadonlyArray<Movie>;
     readonly genres: ReadonlyArray<string>;
-    readonly activeGenre?: string;
-    readonly selectedMovie?: Readonly<Movie>;
-    readonly sortOrder: SortOrder;
     readonly movieUnderUpdateActivity?: Readonly<Movie>;
     readonly currentUpdateActivity?: UpdateActivity;
-    readonly searchText?: string;
-    readonly searchBy?: SearchByType;
 }

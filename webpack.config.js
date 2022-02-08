@@ -21,5 +21,6 @@ module.exports = (env) => merge({
     resolve: {
         extensions: ['.tsx', '.ts', '.js']
     },
-    optimization: require("./webpack/optimization")(env)
+    optimization: require("./webpack/optimization")(env),
+    devServer: require("./webpack/devServer")(env),
 }, require("./webpack/common")(env));

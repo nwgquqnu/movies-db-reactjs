@@ -1,7 +1,6 @@
 import { FetchedMoviesPayload, Movie } from "./movieModels";
 
 export enum ActionType {
-    SelectMovie = "SELECT_MOVIE",
     ShowAddMovie = "SHOW_ADD_MOVIE",
     ShowDeleteMovie = "SHOW_DELETE_MOVIE",
     ShowEditMovie = "SHOW_EDIT_MOVIE",
@@ -20,11 +19,6 @@ interface EditMovieAction {
     payload: Movie;
 }
 
-interface SelectMovieAction {
-    type: ActionType.SelectMovie;
-    payload?: Movie;
-}
-
 export interface FetchedMoviesAction {
     type: ActionType.FetchedMovies;
     payload: FetchedMoviesPayload;
@@ -37,7 +31,6 @@ export interface FetchedGenresAction {
 
 export type MovieDbStateAction = (
     EditMovieAction
-    | SelectMovieAction
     | NoPayloadAction
     | FetchedMoviesAction
     | FetchedGenresAction

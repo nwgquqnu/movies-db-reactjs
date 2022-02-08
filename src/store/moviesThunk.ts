@@ -1,13 +1,7 @@
 import { MovieApi } from '../Services/MovieDataFetcher';
 import { ActionType, FetchedGenresAction, FetchedMoviesAction } from '../types/movieActions';
-import { FetchApiMoviesParams, Movie, MovieDbState, NewMovie, newMovieFields, SortOrder } from '../types/movieModels';
+import { DEFAULT_SORT_ORDER, FetchApiMoviesParams, FetchMoviesParams, Movie, NewMovie, newMovieFields, SortOrder } from '../types/movieModels';
 import { AppDispatch } from './store';
-
-type FetchMoviesParams = {
-    sortOrder?: SortOrder;
-    search?: string;
-    activeGenre?: string | null;
-}
 
 //synchronous action creator
 const fetchMoviesSuccess = (movies: ReadonlyArray<Movie>, params: FetchApiMoviesParams): FetchedMoviesAction => ({
@@ -19,25 +13,18 @@ const fetchMoviesSuccess = (movies: ReadonlyArray<Movie>, params: FetchApiMovies
   calls the api, then dispatches the synchronous action creator
 */
 export const fetchMovies = (fetchParams: FetchMoviesParams) => {
-    return async (dispatch: AppDispatch, getState: () => MovieDbState) => {
+    return async (dispatch: AppDispatch) => {
         try {
-            const state = getState();
-            const sortOrder = fetchParams.sortOrder !== undefined ? fetchParams.sortOrder : state.sortOrder;
-            const activeGenre = fetchParams.activeGenre !== undefined ? fetchParams.activeGenre : state.activeGenre;
+            const sortOrder = fetchParams.sortOrder ?? DEFAULT_SORT_ORDER;
+            const activeGenre = fetchParams.activeGenre;
             const params: FetchApiMoviesParams = {
-                search: fetchParams.search !== undefined ? fetchParams.search : state.searchText,
-                searchBy: fetchParams.search !== undefined ? "title" : state.searchBy,
+                search: fetchParams.search,
+                searchBy: fetchParams.search !== undefined ? "title" : undefined,
                 sortBy: getSortBy(sortOrder),
                 sortOrder: getSortDirection(sortOrder),
                 filter: activeGenre ? [activeGenre] : undefined,
             };
-            let movies = await MovieApi.fetchMovieData(
-                params.sortBy,
-                params.sortOrder,
-                params.search,
-                params.searchBy,
-                params.filter
-            );
+            let movies = await MovieApi.fetchMovieData(params);
             dispatch(fetchMoviesSuccess(movies, params));
         } catch (e) {
             console.log(e)
@@ -48,11 +35,11 @@ export const fetchMovies = (fetchParams: FetchMoviesParams) => {
 /*asynchronous thunk action creator
   calls the api, then dispatches the synchronous action creator
 */
-export const addMovie = (movie: NewMovie) => {
+export const addMovie = (movie: NewMovie, fetchParams: FetchMoviesParams) => {
     return async (dispatch: AppDispatch) => {
         try {
             await MovieApi.addMovie(movie);
-            dispatch(fetchMovies({}));
+            dispatch(fetchMovies(fetchParams));
         } catch (e) {
             console.log(e)
         }
@@ -61,11 +48,11 @@ export const addMovie = (movie: NewMovie) => {
 /*asynchronous thunk action creator
   calls the api, then dispatches the synchronous action creator
 */
-export const updateMovie = (movie: Movie) => {
+export const updateMovie = (movie: Movie, fetchParams: FetchMoviesParams) => {
     return async (dispatch: AppDispatch) => {
         try {
             await MovieApi.updateMovie(movie);
-            dispatch(fetchMovies({}));
+            dispatch(fetchMovies(fetchParams));
         } catch (e) {
             console.log(e)
         }
@@ -74,11 +61,11 @@ export const updateMovie = (movie: Movie) => {
 /*asynchronous thunk action creator
   calls the api, then dispatches the synchronous action creator
 */
-export const deleteMovie = (movie: Movie) => {
+export const deleteMovie = (movie: Movie, fetchParams: FetchMoviesParams) => {
     return async (dispatch: AppDispatch) => {
         try {
             await MovieApi.deleteMovie(movie);
-            dispatch(fetchMovies({}));
+            dispatch(fetchMovies(fetchParams));
         } catch (e) {
             console.log(e)
         }

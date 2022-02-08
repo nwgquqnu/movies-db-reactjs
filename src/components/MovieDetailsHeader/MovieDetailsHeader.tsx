@@ -1,6 +1,5 @@
 import * as React from 'react';
 import useSelectedMovie from '../../hooks/useSelectedMovie';
-import { ActionType } from '../../types/movieActions';
 import MainLogo from '../MainLogo';
 import * as css from './MovieDetailsHeader.module.scss';
 
@@ -26,14 +25,15 @@ function getYear(date: string | undefined): string {
 }
 
 export default () => {
-    const [movie, dispatch] = useSelectedMovie();
+    const [movie, setSearchParamMovieId] = useSelectedMovie();
+
     const displayLength = React.useMemo(() => formatMinutes(movie?.runtime), [movie?.runtime]);
     React.useEffect(() => window.scrollTo(0, 0), [movie]);
 
     return (
         <header className={css.detailsAppHeader}>
             <MainLogo />
-            <button onClick={() => dispatch({ type: ActionType.SelectMovie })}>X</button>
+            <button onClick={() => setSearchParamMovieId()}>X</button>
             <img className={css.moviePoster} src={movie?.poster_path} alt={movie?.title} />
             <div className={css.movieInfo}>
                 <h1 className={css.movieTitle}>{movie?.title}<span>{formatVoteAverage(movie?.vote_average)}</span></h1>

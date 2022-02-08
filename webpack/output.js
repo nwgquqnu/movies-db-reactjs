@@ -2,7 +2,8 @@ const path = require('path');
 
 const config = {
     dev: {
-        filename: '[name]_bundle.js'
+        filename: '[name]_bundle.js',
+        publicPath: "/"
     },
     prod: {
         path: path.resolve(__dirname, '../dist'),
