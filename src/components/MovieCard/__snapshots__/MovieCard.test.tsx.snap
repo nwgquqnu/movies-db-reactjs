@@ -1,0 +1,52 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`MovieCard corresponds to a snapshot 1`] = `
+<DocumentFragment>
+  <article>
+    <nav
+      class=""
+      role="navigation"
+    >
+      <ul>
+        <li>
+          <button
+            aria-haspopup="true"
+          >
+            Details
+          </button>
+          <ul
+            aria-label="submenu"
+            class="dropdown"
+          >
+            <li>
+              <button>
+                Edit
+              </button>
+            </li>
+            <li>
+              <button>
+                Delete
+              </button>
+            </li>
+          </ul>
+        </li>
+      </ul>
+    </nav>
+    <img
+      alt="title"
+      src="poster_path"
+    />
+    <div>
+      <h1>
+        title
+      </h1>
+      <p>
+        rele
+      </p>
+      <p>
+        genres
+      </p>
+    </div>
+  </article>
+</DocumentFragment>
+`;
