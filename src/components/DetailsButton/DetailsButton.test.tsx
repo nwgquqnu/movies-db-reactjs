@@ -1,8 +1,9 @@
-import * as React from 'react';
 import { render, screen } from '@testing-library/react';
+import userEvent from '@testing-library/user-event';
+import * as React from 'react';
 import DetailsButton from '.';
-import { Movie } from '../../types/movieModels';
 import { ActionType } from '../../types/movieActions';
+import { Movie } from '../../types/movieModels';
 
 
 describe("DetailsButton", () => {
@@ -30,7 +31,7 @@ describe("DetailsButton", () => {
         render(<DetailsButton movie={movie} dispatch={mockFn} containerClassName="some-test-class-name"/>);
         const btn = screen.queryByText(/Edit/);
         expect(btn).toBeInTheDocument();
-        btn?.click();
+        userEvent.click(btn!);
         expect(mockFn).toHaveBeenCalledWith({ type: ActionType.ShowEditMovie, payload: movie})
     });
 
@@ -39,7 +40,7 @@ describe("DetailsButton", () => {
         render(<DetailsButton movie={movie} dispatch={mockFn} containerClassName="some-test-class-name"/>);
         const btn = screen.queryByText(/Delete/);
         expect(btn).toBeInTheDocument();
-        btn?.click();
+        userEvent.click(btn!);
         expect(mockFn).toHaveBeenCalledWith({ type: ActionType.ShowDeleteMovie, payload: movie})
     });
 

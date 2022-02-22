@@ -1,8 +1,9 @@
-import React from "react";
 import { render, screen } from "@testing-library/react";
+import userEvent from '@testing-library/user-event';
+import React from "react";
+import { MemoryRouter, Route, Routes, useSearchParams } from "react-router-dom";
 import MovieCard from ".";
 import { Movie } from "../../types/movieModels";
-import { MemoryRouter, Route, useLocation, Location, Routes, useSearchParams } from "react-router-dom";
 
 describe("MovieCard", () => {
     let movie: Movie;
@@ -45,14 +46,14 @@ describe("MovieCard", () => {
                 <Routes>
                     <Route
                         path="*"
-                        element={<LocationRetriever/>}
+                        element={<LocationRetriever />}
                     />
                 </Routes>
             </MemoryRouter>
         );
         const article = screen.queryByRole("article");
         expect(article).toBeInTheDocument();
-        article?.click();
+        userEvent.click(article!);
 
         expect(testLocation).toEqual("movie=123");
     });

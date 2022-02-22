@@ -1,11 +1,11 @@
-import { fireEvent, render, screen } from "@testing-library/react";
+import { render, screen } from "@testing-library/react";
+import userEvent from '@testing-library/user-event';
 import React from "react";
 import { Provider } from "react-redux";
 import { MemoryRouter } from "react-router-dom";
 import App from "./App";
-import { store } from "./store/store";
-import { Movie } from "./types/movieModels";
 import "./mocks/setupServer";
+import { store } from "./store/store";
 
 window.scrollTo = jest.fn();
 
@@ -25,10 +25,10 @@ describe("Application", () => {
             </Provider>, { wrapper: MemoryRouter });
         const title = await screen.findByText(/movie title/);
         expect(title).toBeInTheDocument();
-        fireEvent.click(title);
+        userEvent.click(title);
 
         expect(await screen.findByText(/movie overview/)).toBeInTheDocument();
-        
+
         expect(asFragment()).toMatchSnapshot();
 
     });
