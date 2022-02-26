@@ -17,7 +17,7 @@ export default class RadioToggle extends React.Component<RadioToggleProps, { [ke
         const newState: { [key: string]: string; } = {};
         props.values.forEach(value => {
             if (!newState[value]) {
-                newState[value] = `radio-toggle-${Math.ceil(Math.random() * 1000)}-${value.replaceAll(' ', '-')}`;
+                newState[value] = `radio-toggle-${value.replaceAll(' ', '-')}`;
             }
         });
         return newState;
